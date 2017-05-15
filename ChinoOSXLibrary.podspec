@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
                     Official Swift wrapper for CHINO.io API
                    DESC
 
-  s.homepage     = "http://chino.io"
+  s.homepage     = "https://chino.io"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-    s.license      = { :type => "MIT", :file => "LICENSE" }
+    s.license      = 'MIT'
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/chinoio/chino-ios.git", :tag => "1.0" }
+  s.source       = { :git => "https://github.com/chinoio/chino-ios.git", :tag => s.version }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -94,7 +94,7 @@ Pod::Spec.new do |s|
   s.source_files  = 'ChinoOSXLibrary/**/*.{h,m,swift}'
 s.preserve_path = 'CommonCrypto/module.modulemap'
 #s.module_map = 'CommonCrypto/module.modulemap'	
-  s.exclude_files = "Classes/Exclude"
+#  s.exclude_files = "Classes/Exclude"
 s.pod_target_xcconfig = {
     'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]'  => '$(PODS_ROOT)/ChinoOSXLibrary/CommonCrypto'
   }
