@@ -4,7 +4,7 @@ The iOS deployment target is set to 10.3
 If you want to change it, check the settings of the project
 under *General* tab.
 
-## SDK distribution
+### SDK distribution
 
 You can integrate the CHINO.io Swift SDK into your project using one of several methods.
 
@@ -38,7 +38,10 @@ Once your project is integrated with the CHINO.io Swift SDK, you can pull SDK up
 $ pod update
 ```  
 
-##Setup
+---
+
+### Setup
+
 Clone the github repository and open it in XCode.
 There are some tests you can use as examples of usage
 of the framework under *ChinoOSXLibraryTests/* folder
@@ -47,7 +50,8 @@ In the file ChinoOSXLibraryTests.swift you have to insert
 your <customer-id> and <customer-key> in order for the tests
 to work
 
-##Usage
+### Usage
+
 Once you have successfully imported the *Chino.io* SDKs you have to create a *ChinoAPI* variable  
 
 ```Swift
