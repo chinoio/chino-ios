@@ -38,8 +38,6 @@ Once your project is integrated with the CHINO.io Swift SDK, you can pull SDK up
 $ pod update
 ```  
 
----
-
 ##Setup
 Clone the github repository and open it in XCode.
 There are some tests you can use as examples of usage
