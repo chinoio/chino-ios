@@ -20,8 +20,8 @@ class ChinoOSXLibraryTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         url = "https://api.test.chino.io/v1"
-        customer_id = "<your-customer-key>"
-        customer_key = "<your-customer_key>"
+        customer_id = "<your-customer-id>"
+        customer_key = "<your-customer-key>"
         chino = ChinoAPI(hostUrl: url, customerId: customer_id, customerKey: customer_key)
 
         //Clear all the resources for such customer_id and customer_key, needed to test some functionalities

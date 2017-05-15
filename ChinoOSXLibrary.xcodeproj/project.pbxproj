@@ -80,7 +80,7 @@
 		A4057B941E9B80D600C08C05 /* Repositories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repositories.swift; sourceTree = "<group>"; };
 		A4057B981E9B815100C08C05 /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		A4057B9C1E9B819700C08C05 /* GetRepositoriesResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetRepositoriesResponse.swift; sourceTree = "<group>"; };
-		A4057B9E1E9B81BF00C08C05 /* ChinoPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ChinoPlayground.playground; sourceTree = SOURCE_ROOT; };
+		A4057B9E1E9B81BF00C08C05 /* ChinoPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ChinoPlayground.playground; sourceTree = "<group>"; };
 		A4115C0D1EAE446F007F0158 /* CreateDocumentResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDocumentResponse.swift; sourceTree = "<group>"; };
 		A4115C0F1EAE46DD007F0158 /* GetDocumentsResponseFullContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDocumentsResponseFullContent.swift; sourceTree = "<group>"; };
 		A4115C121EB08613007F0158 /* UserSchema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSchema.swift; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 		A4559C491EA7572E00793519 /* GetSchemasResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetSchemasResponse.swift; sourceTree = "<group>"; };
 		A4559C4B1EA7585E00793519 /* SchemaRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaRequest.swift; sourceTree = "<group>"; };
 		A4747A041EB0A50000E198A1 /* ChinoOSXLibraryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChinoOSXLibraryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4747A061EB0A50000E198A1 /* ChinoOSXLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChinoOSXLibraryTests.swift; path = ChinoOSXLibraryTests/ChinoOSXLibraryTests.swift; sourceTree = SOURCE_ROOT; };
+		A4747A061EB0A50000E198A1 /* ChinoOSXLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinoOSXLibraryTests.swift; sourceTree = "<group>"; };
 		A4747A081EB0A50000E198A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A48AD7231EB21EF300C124DD /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		A48AD7261EB22D0900C124DD /* ChinoCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChinoCollection.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		A4A7AE621EB1F62C0091C836 /* GetGroupsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetGroupsResponse.swift; sourceTree = "<group>"; };
 		A4BD31FF1EAE32F4003D5576 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A4BD32011EAE37D3003D5576 /* GetDocumentsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDocumentsResponse.swift; sourceTree = "<group>"; };
-		A4D7A2EA1EB0BFAC004FE034 /* ChinoResourcesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChinoResourcesTests.swift; path = ChinoOSXLibraryTests/ChinoResourcesTests.swift; sourceTree = SOURCE_ROOT; };
+		A4D7A2EA1EB0BFAC004FE034 /* ChinoResourcesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChinoResourcesTests.swift; sourceTree = "<group>"; };
 		A4EDD83C1EAA5D0C004F2A2E /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		A4EDD83E1EAE02CC004F2A2E /* CreateDocumentRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDocumentRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -621,6 +621,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -667,6 +668,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
