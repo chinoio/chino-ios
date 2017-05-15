@@ -4,6 +4,42 @@ The iOS deployment target is set to 10.3
 If you want to change it, check the settings of the project
 under *General* tab.
 
+## SDK distribution
+
+You can integrate the CHINO.io Swift SDK into your project using one of several methods.
+
+### CocoaPods
+
+To use [CocoaPods](http://cocoapods.org), a dependency manager for Cocoa projects, you should first install it using the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+Then navigate to the directory that contains your project and create a new file called `Podfile`. You can do this either with `pod init`, or open an existing Podfile, and then add `pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.0'` to the main loop. Your Podfile should look something like this:
+
+```ruby
+use_frameworks!
+
+target '<YOUR_PROJECT_NAME>' do
+pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.0'
+end
+```
+
+Then, run the following command to install the dependency:
+
+```bash
+$ pod install
+```
+
+Once your project is integrated with the CHINO.io Swift SDK, you can pull SDK updates using the following command:
+
+```bash
+$ pod update
+```  
+
+---
+
 ##Setup
 Clone the github repository and open it in XCode.
 There are some tests you can use as examples of usage
@@ -42,3 +78,4 @@ chino.repositories.createRepository(description: "test_repository_description") 
 
 ```  
 
+pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.0'
