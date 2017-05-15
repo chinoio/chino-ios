@@ -34,11 +34,11 @@ An example for the creation of a Repository is the following
 
 ```Swift
 chino.repositories.createRepository(description: "test_repository_description") { (repository) in
-    #Here you can use the variable 'repository' when the call is completed
+    // Here you can use the variable 'repository' when the call is completed
     ...
 }
 
-#   <----   While the call is executed the main thread continue to run
+// <---- While the call is executed the main thread continue to run
 
 ```  
 
