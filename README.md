@@ -1,3 +1,3 @@
-# chino-ios
-Official Swift wrapper for Chino.io
-Please switch to branch develop to use the SDKs
+#  CHINO.io Swift client #
+*Official* Swift wrapper for **CHINO.io** API  
+Please switch to branch develop for the SDKs
