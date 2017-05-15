@@ -4,7 +4,7 @@ The iOS deployment target is set to 10.3
 If you want to change it, check the settings of the project
 under *General* tab.
 
-###Setup
+##Setup
 Clone the github repository and open it in XCode.
 There are some tests you can use as examples of usage
 of the framework under *ChinoOSXLibraryTests/* folder
