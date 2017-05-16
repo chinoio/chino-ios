@@ -40,6 +40,46 @@ $ pod update
 
 ---
 
+### Carthage
+
+You can also integrate the CHINO.io Swift SDK into your project using [Carthage](https://github.com/Carthage/Carthage), a decentralized dependency manager for Cocoa. Carthage offers more flexibility than CocoaPods, but requires some additional work. You can install Carthage (with Xcode 7+) via [Homebrew](http://brew.sh/):
+
+```bash
+brew update
+brew install carthage
+```
+
+To install the CHINO.io Swift SDK via Carthage, you need to create a `Cartfile` in your project with the following contents:
+
+```
+# CHINO.io
+github "https://github.com/chinoio/chino-ios" ~> 1.0
+```
+
+Then, run the following command to install the dependency to checkout and build the CHINO.io Swift SDK repository:
+
+##### iOS
+
+```bash
+carthage update --platform iOS
+```
+
+In the Project Navigator in Xcode, select your project, and then navigate to **General** > **Linked Frameworks and Libraries**, then drag and drop `ChinoOSXLibrary.framework` (from `Carthage/Build/iOS`).
+
+Then, navigate to **Build Phases** > **+** > **New Run Script Phase**. In the newly-created **Run Script** section, add the following code to the script body area (beneath the "Shell" box):
+
+```
+/usr/local/bin/carthage copy-frameworks
+```
+
+Then, navigate to the **Input Files** section and add the following path:
+
+```
+$(SRCROOT)/Carthage/Build/iOS/ChinoOSXLibrary.framework
+```
+
+---
+
 ### Setup
 
 Clone the github repository and open it in XCode.
