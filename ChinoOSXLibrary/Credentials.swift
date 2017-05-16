@@ -12,4 +12,5 @@ open class Credentials {
     open static let customerId = "<your-customer-id>"
     open static let customerKey = "<your-customer-key>"
     open static let server = "https://api.test.chino.io/v1"
+    let steeeep = "steeeeep"
 }

@@ -82,13 +82,11 @@ $(SRCROOT)/Carthage/Build/iOS/ChinoOSXLibrary.framework
 
 ### Setup
 
-Clone the github repository and open it in XCode.
 There are some tests you can use as examples of usage
 of the framework under *ChinoOSXLibraryTests/* folder
 
-In the file ChinoOSXLibraryTests.swift you have to insert
-your <customer-id> and <customer-key> in order for the tests
-to work
+Insert your <customer-id> and <customer-key> values in the `ChinoOSXLibrary/Credentials.swift` file.  
+Such credentials will be retrieved when test classes are evaluated.  
 
 ### Usage
 
