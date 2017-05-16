@@ -10,19 +10,13 @@ import XCTest
 import ChinoOSXLibrary
 
 class ChinoOSXLibraryTests: XCTestCase {
-    
-    var url: String!
-    var customer_id: String!
-    var customer_key: String!
+
     var chino: ChinoAPI!
     
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        url = "https://api.test.chino.io/v1"
-        customer_id = "<your-customer-id>"
-        customer_key = "<your-customer-key>"
-        chino = ChinoAPI(hostUrl: url, customerId: customer_id, customerKey: customer_key)
+        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
 
         //Clear all the resources for such customer_id and customer_key, needed to test some functionalities
         //NOTE: DO NOT use production values for these tests
@@ -822,7 +816,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino=ChinoAPI.init(hostUrl: self.url, customerId: self.customer_id, customerKey: self.customer_key)
+        self.chino=ChinoAPI.init(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
             
         self.chino.users.deleteUser(user_id: user.user_id, force: true) { (result) in
             XCTAssert(result=="success")
@@ -951,7 +945,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        chino = ChinoAPI(hostUrl: url, customerId: customer_id, customerKey: customer_key)
+        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
 
         chino.documents.deleteDocument(document_id: document.document_id, force: true) { (result) in
             XCTAssert(result == "success")
