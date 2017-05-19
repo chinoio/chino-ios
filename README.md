@@ -109,8 +109,18 @@ The functions are asyncronous, this means that they are called on separate threa
 An example for the creation of a Repository is the following
 
 ```Swift
-chino.repositories.createRepository(description: "test_repository_description") { (repository) in
-    // Here you can use the variable 'repository' when the call is completed
+chino.repositories.createRepository(description: "test_repository_description") { (response) in
+
+    // Response is a function which returns the requested resource (in this case a Repository) and
+    // returns an error if the call fails
+    var repository: Repository!
+    do{
+        repository = try response()
+    } catch let error {
+
+        // Here you can manage the error
+        print((error as! ChinoError).toString())
+    }
     ...
 }
 

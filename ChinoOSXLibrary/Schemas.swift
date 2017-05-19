@@ -10,66 +10,76 @@ import Foundation
 
 open class Schemas: ChinoBaseAPI{
     
-    public func getSchema(schema_id id: String, completion: @escaping (_ schema: Schema?) -> ()) {
+    public func getSchema(schema_id id: String, completion: @escaping (_ inner: () throws -> Schema) -> Void) {
         getResource(path: "/schemas/"+id, offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let schemaString: NSDictionary = body!["schema"] as! NSDictionary
                 if let schema = try? Schema(json: schemaString as! [String : Any]) {
-                    completion(schema)
+                    completion({schema})
                 }
             }
         }
     }
     
-    public func listSchemas(repository_id id: String, completion: @escaping (_ schemas: GetSchemasResponse?) -> ()) {
+    public func listSchemas(repository_id id: String, completion: @escaping (_ inner: () throws -> GetSchemasResponse) -> Void) {
         getResource(path: "/repositories/"+id+"/schemas", offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let schemas = try? GetSchemasResponse(json: body!) {
-                    completion(schemas)
+                    completion({schemas})
                 }
             }
         }
     }
     
-    public func listSchemas(repository_id id: String, offset: Int, limit: Int, completion: @escaping (_ schemas: GetSchemasResponse?) -> ()) {
+    public func listSchemas(repository_id id: String, offset: Int, limit: Int, completion: @escaping (_ inner: () throws -> GetSchemasResponse) -> Void) {
         getResource(path: "/repositories/"+id+"/schemas", offset: offset, limit: limit) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let schemas = try? GetSchemasResponse(json: body!) {
-                    completion(schemas)
+                    completion({schemas})
                 }
             }
         }
     }
     
-    public func createSchema(repository_id id: String, description: String, structure: SchemaStructure, completion: @escaping (_ schema: Schema?) -> ()) {
+    public func createSchema(repository_id id: String, description: String, structure: SchemaStructure, completion: @escaping (_ inner: () throws -> Schema) -> Void) {
         let request = SchemaRequest(description: description, structure: structure)
         postResource(path: "/repositories/\(id)/schemas", json: request.toString()) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let schemaString: NSDictionary = body!["schema"] as! NSDictionary
                 if let schema = try? Schema(json: schemaString as! [String : Any]) {
-                    completion(schema)
+                    completion({schema})
                 }
             }
         }
     }
     
-    public func updateSchema(schema_id id: String, description: String, structure: SchemaStructure, completion: @escaping (_ schema: Schema?) -> ()) {
+    public func updateSchema(schema_id id: String, description: String, structure: SchemaStructure, completion: @escaping (_ inner: () throws -> Schema) -> Void) {
         let request = SchemaRequest(description: description, structure: structure)
         putResource(path: "/schemas/\(id)", json: request.toString()) {
         (data, error) in
-        if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as?       [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as?       [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let schemaString: NSDictionary = body!["schema"] as! NSDictionary
                 if let schema = try? Schema(json: schemaString as! [String : Any]) {
-                    completion(schema)
+                    completion({schema})
                 }
             }
         }

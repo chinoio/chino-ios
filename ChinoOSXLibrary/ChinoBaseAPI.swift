@@ -10,7 +10,7 @@ import Foundation
 
 open class ChinoBaseAPI{
     
-    public typealias CompletionHandler = (Data?, Error?) -> Void
+    public typealias CompletionHandler = (Data?, ChinoError?) -> Void
     let url: String
     
     public init(hostUrl url: String){
@@ -34,15 +34,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -64,15 +64,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -96,15 +96,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -128,15 +128,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -161,15 +161,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -193,15 +193,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -227,15 +227,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }
@@ -259,15 +259,15 @@ open class ChinoBaseAPI{
                     // this won't happen until the data comes back from the remote call.
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)
                     print(dataString ?? "problem getting value")
+                    completion(data , nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }
-            // Call your closure
-            completion(data , error)
         }
         task.resume()
     }

@@ -10,80 +10,92 @@ import Foundation
 
 open class Users: ChinoBaseAPI{
     
-    public func getUser(user_id id: String, completion: @escaping (_ schema: User?) -> ()) {
+    public func getUser(user_id id: String, completion: @escaping (_ inner: () throws -> User) -> Void) {
         getResource(path: "/users/"+id, offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let userString: NSDictionary = body!["user"] as! NSDictionary
                 if let user = try? User(json: userString as! [String : Any]) {
-                    completion(user)
+                    completion({user})
                 }
             }
         }
     }
     
-    public func listUsers(user_schema_id id: String, completion: @escaping (_ schemas: GetUsersResponse?) -> ()) {
+    public func listUsers(user_schema_id id: String, completion: @escaping (_ inner: () throws -> GetUsersResponse) -> Void) {
         getResource(path: "/user_schemas/"+id+"/users", offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let users = try? GetUsersResponse(json: body!) {
-                    completion(users)
+                    completion({users})
                 }
             }
         }
     }
     
-    public func listUsers(user_schema_id id: String, offset: Int, limit: Int, completion: @escaping (_ schemas: GetUsersResponse?) -> ()) {
+    public func listUsers(user_schema_id id: String, offset: Int, limit: Int, completion: @escaping (_ inner: () throws -> GetUsersResponse) -> Void) {
         getResource(path: "/user_schemas/"+id+"/users", offset: offset, limit: limit) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let users = try? GetUsersResponse(json: body!) {
-                    completion(users)
+                    completion({users})
                 }
             }
         }
     }
     
-    public func createUser(username: String, password: String, user_schema_id id: String, attributes: NSDictionary, completion: @escaping (_ schema: User?) -> ()) {
+    public func createUser(username: String, password: String, user_schema_id id: String, attributes: NSDictionary, completion: @escaping (_ inner: () throws -> User) -> Void) {
         let request = CreateUserRequest(username: username, password: password, attributes: attributes)
         postResource(path: "/user_schemas/\(id)/users", json: request.toString()) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let userString: NSDictionary = body!["user"] as! NSDictionary
                 if let user = try? User(json: userString as! [String : Any]) {
-                    completion(user)
+                    completion({user})
                 }
             }
         }
     }
     
-    public func updateUser(username: String, password: String, user_id id: String, attributes: NSDictionary, completion: @escaping (_ schema: User?) -> ()) {
+    public func updateUser(username: String, password: String, user_id id: String, attributes: NSDictionary, completion: @escaping (_ inner: () throws -> User) -> Void) {
         let request = CreateUserRequest(username: username, password: password, attributes: attributes)
         putResource(path: "/users/\(id)", json: request.toString()) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let userString: NSDictionary = body!["user"] as! NSDictionary
                 if let user = try? User(json: userString as! [String : Any]) {
-                    completion(user)
+                    completion({user})
                 }
             }
         }
     }
     
-    public func updateUser(user_id id: String, attributes: NSDictionary, completion: @escaping (_ schema: User?) -> ()) {
+    public func updateUser(user_id id: String, attributes: NSDictionary, completion: @escaping (_ inner: () throws -> User) -> Void) {
         let request = UpdateUserPatch(attributes: attributes)
         patchResource(path: "/users/\(id)", json: request.toString()) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let userString: NSDictionary = body!["user"] as! NSDictionary
                 if let user = try? User(json: userString as! [String : Any]) {
-                    completion(user)
+                    completion({user})
                 }
             }
         }

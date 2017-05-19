@@ -10,66 +10,76 @@ import Foundation
 
 open class Collections: ChinoBaseAPI{
     
-    public func getCollection(collection_id id: String, completion: @escaping (_ repository: ChinoCollection?) -> ()) {
+    public func getCollection(collection_id id: String, completion: @escaping (_ inner: () throws -> ChinoCollection) -> Void) {
         getResource(path: "/collections/"+id, offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let collectionString: NSDictionary = body!["collection"] as! NSDictionary
                 if let collection = try? ChinoCollection(json: collectionString as! [String : Any]) {
-                    completion(collection)
+                    completion({collection})
                 }
             }
         }
     }
     
-    public func listCollections(completion: @escaping (_ repositories: GetCollectionsResponse?) -> ()) {
+    public func listCollections(completion: @escaping (_ inner: () throws -> GetCollectionsResponse) -> Void) {
         getResource(path: "/collections", offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let collections = try? GetCollectionsResponse(json: body!) {
-                    completion(collections)
+                    completion({collections})
                 }
             }
         }
     }
     
-    public func listCollections(offset: Int, limit: Int, completion: @escaping (_ repositories: GetCollectionsResponse?) -> ()) {
+    public func listCollections(offset: Int, limit: Int, completion: @escaping (_ inner: () throws -> GetCollectionsResponse) -> Void) {
         getResource(path: "/collections", offset: offset, limit: limit) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let collections = try? GetCollectionsResponse(json: body!) {
-                    completion(collections)
+                    completion({collections})
                 }
             }
         }
     }
     
-    public func createCollection(name: String, completion: @escaping (_ repository: ChinoCollection?) -> ()) {
+    public func createCollection(name: String, completion: @escaping (_ inner: () throws -> ChinoCollection) -> Void) {
         let createCollectionRequest = "{\"name\": \"\(name)\"}"
         postResource(path: "/collections", json: createCollectionRequest) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let collectionString: NSDictionary = body!["collection"] as! NSDictionary
                 if let collection = try? ChinoCollection(json: collectionString as! [String : Any]) {
-                    completion(collection)
+                    completion({collection})
                 }
             }
         }
     }
     
-    public func updateCollection(collection_id id: String, name: String, completion: @escaping (_ repository: ChinoCollection?) -> ()) {
+    public func updateCollection(collection_id id: String, name: String, completion: @escaping (_ inner: () throws -> ChinoCollection) -> Void) {
         let updateCollectionRequest = "{\"name\": \"\(name)\"}"
         putResource(path: "/collections/\(id)", json: updateCollectionRequest) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let collectionString: NSDictionary = body!["collection"] as! NSDictionary
                 if let collection = try? ChinoCollection(json: collectionString as! [String : Any]) {
-                    completion(collection)
+                    completion({collection})
                 }
             }
         }
@@ -99,25 +109,29 @@ open class Collections: ChinoBaseAPI{
         }
     }
     
-    public func listDocuments(collection_id id: String, offset: Int, limit: Int, completion: @escaping (_ schemas: GetDocumentsResponse?) -> ()) {
+    public func listDocuments(collection_id id: String, offset: Int, limit: Int, completion: @escaping (_ inner: () throws -> GetDocumentsResponse) -> Void) {
         getResource(path: "/collections/"+id+"/documents", offset: offset, limit: limit) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let documents = try? GetDocumentsResponse(json: body!) {
-                    completion(documents)
+                    completion({documents})
                 }
             }
         }
     }
     
-    public func listDocuments(collection_id id: String, completion: @escaping (_ schemas: GetDocumentsResponse?) -> ()) {
+    public func listDocuments(collection_id id: String, completion: @escaping (_ inner: () throws -> GetDocumentsResponse) -> Void) {
         getResource(path: "/collections/"+id+"/documents", offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let documents = try? GetDocumentsResponse(json: body!) {
-                    completion(documents)
+                    completion({documents})
                 }
             }
         }

@@ -24,6 +24,7 @@
 		A4115C1F1EB089F4007F0158 /* UserSchemas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4115C1E1EB089F4007F0158 /* UserSchemas.swift */; };
 		A4115C211EB0935C007F0158 /* ChinoConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4115C201EB0935C007F0158 /* ChinoConstants.swift */; };
 		A41B05FB1EC46E710041823F /* ChinoErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41B05FA1EC46E710041823F /* ChinoErrors.swift */; };
+		A42982781ECF302A00CD1537 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A42982771ECF302A00CD1537 /* README.md */; };
 		A443E5D11EA66BC3007286A9 /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = A443E5D01EA66BC3007286A9 /* Schema.swift */; };
 		A443E5D31EA66C6A007286A9 /* SchemaStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = A443E5D21EA66C6A007286A9 /* SchemaStructure.swift */; };
 		A445DDC71EBB6A5E00EF23D4 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A445DDC61EBB6A5E00EF23D4 /* Permissions.swift */; };
@@ -92,6 +93,7 @@
 		A4115C1E1EB089F4007F0158 /* UserSchemas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSchemas.swift; sourceTree = "<group>"; };
 		A4115C201EB0935C007F0158 /* ChinoConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChinoConstants.swift; sourceTree = "<group>"; };
 		A41B05FA1EC46E710041823F /* ChinoErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChinoErrors.swift; sourceTree = "<group>"; };
+		A42982771ECF302A00CD1537 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A434D0F91EC3128D006A30AC /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = CommonCrypto/module.modulemap; sourceTree = SOURCE_ROOT; };
 		A443E5D01EA66BC3007286A9 /* Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		A443E5D21EA66C6A007286A9 /* SchemaStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaStructure.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 		A4057B791E9B7FF200C08C05 = {
 			isa = PBXGroup;
 			children = (
+				A42982771ECF302A00CD1537 /* README.md */,
 				A434D0F81EC31244006A30AC /* CommonCrypto */,
 				A4057B9E1E9B81BF00C08C05 /* ChinoPlayground.playground */,
 				A4057B851E9B7FF200C08C05 /* ChinoOSXLibrary */,
@@ -546,6 +549,7 @@
 				A44DC8401EB0D7C20060441D /* CreateUserRequest.swift in Sources */,
 				A4EDD83F1EAE02CC004F2A2E /* CreateDocumentRequest.swift in Sources */,
 				A44A9FE51EB8C5E500E5FBB9 /* Application.swift in Sources */,
+				A42982781ECF302A00CD1537 /* README.md in Sources */,
 				A445DDC91EBB6C7B00EF23D4 /* GetPermissionsResponse.swift in Sources */,
 				A4024B611EB86E36005637E7 /* Search.swift in Sources */,
 				A493FA8C1EAE2C3800DF3528 /* Documents.swift in Sources */,

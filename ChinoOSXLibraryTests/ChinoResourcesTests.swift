@@ -218,10 +218,16 @@ public func deleteAll(chino: ChinoAPI) {
     var repo_count = 1
     
     var repos = [Repository]()
-    var schemas = [[Schema]]()
-    var documents = [[CreateDocumentResponse]]()
+    var schemas = [Schema]()
+    var documents = [CreateDocumentResponse]()
     
-    chino.repositories.listRepositories() { (rs) in
+    chino.repositories.listRepositories() { (response) in
+        var rs: GetRepositoriesResponse!
+        do{
+            rs = try response()
+        } catch let error {
+            print((error as! ChinoError).toString())
+        }
         repos = (rs?.repositories)!
         check = false
     }
@@ -230,10 +236,18 @@ public func deleteAll(chino: ChinoAPI) {
     
     repo_count = repos.count
     for r in repos {
-        chino.schemas.listSchemas(repository_id: r.repository_id) { (ss) in
-            schemas.append((ss?.schemas)!)
-            check = false
+        chino.schemas.listSchemas(repository_id: r.repository_id) { (response) in
+            var ss: GetSchemasResponse!
+            do{
+                ss = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            for s in (ss?.schemas)! {
+                schemas.append(s)
+            }
             repo_count = repo_count-1
+            check = false
         }
         while(check){}
         check = true
@@ -241,50 +255,47 @@ public func deleteAll(chino: ChinoAPI) {
     while(repo_count>0){}
     repo_count = repos.count
     
-    for ss in schemas {
-        schema_count = ss.count
-        for s in ss {
-            chino.documents.listDocumentsWithoutContent(schema_id: s.schema_id) { (ds) in
-                document_count=(ds?.count)!
-                documents.append((ds?.documents)!)
-                check = false
-                schema_count = schema_count-1
+    schema_count = schemas.count
+    for s in schemas {
+        chino.documents.listDocumentsWithoutContent(schema_id: s.schema_id) { (response) in
+            var ds: GetDocumentsResponse!
+            do{
+                ds = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
             }
-            while(check){}
-            check = true
+            for d in (ds?.documents)! {
+                documents.append(d)
+            }
+            schema_count = schema_count-1
+            check = false
         }
-        while(schema_count>0){}
-        schema_count = ss.count
-        repo_count = repo_count-1
+        while(check){}
+        check = true
     }
-    while(repo_count>0){}
-    repo_count = repos.count
+    while(schema_count>0){}
     
     check = true
     document_count = documents.count
-    for ds in documents {
-        for d in ds {
-            chino.documents.deleteDocument(document_id: d.document_id, force: true) { (result) in
-                check = false
-            }
-            while(check){}
-            check = true
-            document_count = document_count-1
+    for d in documents {
+        chino.documents.deleteDocument(document_id: d.document_id, force: true) { (result) in
+            check = false
         }
+        while(check){}
+        document_count = document_count-1
+        check = true
     }
     while(document_count>0){}
     
     check = true
     schema_count = schemas.count
-    for ss in schemas {
-        for s in ss {
-            chino.schemas.deleteSchema(schema_id: s.schema_id, force: true) { (result) in
-                check = false
-            }
-            while(check){}
-            check = true
-            schema_count = schema_count-1
+    for s in schemas {
+        chino.schemas.deleteSchema(schema_id: s.schema_id, force: true) { (result) in
+            check = false
         }
+        while(check){}
+        schema_count = schema_count-1
+        check = true
     }
     while(schema_count>0){}
     
@@ -301,13 +312,19 @@ public func deleteAll(chino: ChinoAPI) {
     
     
     var user_schemas = [UserSchema]()
-    var users = [[User]]()
+    var users = [User]()
     
     var user_schema_count = 1
     var user_count = 1
     
     check = true
-    chino.user_schemas.listUserSchemas(){ (schemas) in
+    chino.user_schemas.listUserSchemas(){ (response) in
+        var schemas: GetUserSchemasResponse!
+        do{
+            schemas = try response()
+        } catch let error {
+            print((error as! ChinoError).toString())
+        }
         user_schema_count=(schemas?.count)!
         user_schemas = (schemas?.user_schemas)!
         check = false
@@ -315,27 +332,34 @@ public func deleteAll(chino: ChinoAPI) {
     while(check){}
     check = true
     
+    user_schema_count = user_schemas.count
     for us in user_schemas {
-        chino.users.listUsers(user_schema_id: us.user_schema_id) { (uss) in
-            users.append((uss?.users)!)
+        chino.users.listUsers(user_schema_id: us.user_schema_id) { (response) in
+            var uss: GetUsersResponse!
+            do{
+                uss = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            for u in (uss?.users)! {
+                users.append(u)
+            }
             check = false
         }
         while(check){}
-        check = true
         user_schema_count = user_schema_count-1
+        check = true
     }
     while(user_schema_count>0) {}
     
     user_count = users.count
-    for us in users {
-        for u in us {
-            chino.users.deleteUser(user_id: u.user_id, force: true) { (result) in
-                check = false
-            }
-            while(check){}
-            check = true
+    for u in users {
+        chino.users.deleteUser(user_id: u.user_id, force: true) { (result) in
+            check = false
         }
+        while(check){}
         user_count = user_count-1
+        check = true
     }
     while(user_count>0) {}
     
@@ -349,7 +373,13 @@ public func deleteAll(chino: ChinoAPI) {
     
     var group_count = 1
     
-    chino.groups.listGroups(){ (groups) in
+    chino.groups.listGroups(){ (response) in
+        var groups: GetGroupsResponse!
+        do{
+            groups = try response()
+        } catch let error {
+            print((error as! ChinoError).toString())
+        }
         group_count = (groups?.count)!
         for g in (groups?.groups)! {
             chino.groups.deleteGroup(group_id: g.group_id, force: true) { (result) in
@@ -363,7 +393,13 @@ public func deleteAll(chino: ChinoAPI) {
     
     var collection_count = 1
     
-    chino.collections.listCollections(){ (collections) in
+    chino.collections.listCollections(){ (response) in
+        var collections: GetCollectionsResponse!
+        do{
+            collections = try response()
+        } catch let error {
+            print((error as! ChinoError).toString())
+        }
         collection_count = (collections?.count)!
         for c in (collections?.collections)! {
             chino.collections.deleteCollection(collection_id: c.collection_id, force: true) { (result) in

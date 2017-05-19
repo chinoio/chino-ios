@@ -11,7 +11,7 @@ import CommonCrypto
 
 open class Blobs: ChinoBaseAPI{
     
-    public func uploadBlob(path: String, document_id: String, field: String, file_name: String, completion: @escaping (_ repository: Blob?) -> ()){
+    public func uploadBlob(path: String, document_id: String, field: String, file_name: String, completion: @escaping (_ inner: () throws -> Blob) -> Void){
         initUpload(document_id: document_id, field: field, file_name: file_name) { (createBlobResponse) in
     
             var bytes = [UInt8]()
@@ -21,8 +21,21 @@ open class Blobs: ChinoBaseAPI{
                 data.getBytes(&buffer, length: data.length)
                 bytes = buffer
                 
-                self.uploadChunk(upload_id: (createBlobResponse?.upload_id)!, chunk_data: bytes, offset: 0, length: data.length) { (response) in
-                    self.commitUpload(upload_id: (response?.upload_id)!) { (blob) in
+                var blobResponse: CreateBlobResponse!
+                do {
+                    blobResponse = try createBlobResponse()
+                } catch let error{
+                    completion({throw error})
+                }
+                
+                self.uploadChunk(upload_id: (blobResponse.upload_id), chunk_data: bytes, offset: 0, length: data.length) { (response) in
+                    var blobResponse: CreateBlobResponse!
+                    do {
+                        blobResponse = try response()
+                    } catch let error{
+                        completion({throw error})
+                    }
+                    self.commitUpload(upload_id: (blobResponse.upload_id)) { (blob) in
                         completion(blob)
                     }
                 }
@@ -30,35 +43,39 @@ open class Blobs: ChinoBaseAPI{
         }
     }
     
-    public func initUpload(document_id: String, field: String, file_name: String, completion: @escaping (_ repository: CreateBlobResponse?) -> ()) {
+    public func initUpload(document_id: String, field: String, file_name: String, completion: @escaping (_ inner: () throws -> CreateBlobResponse) -> Void) {
         let createBlobRequest = CreateBlobRequest(document_id: document_id, field: field, file_name: file_name)
         postResource(path: "/blobs", json: createBlobRequest.toString()) {
             (data, error) in
             if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let appString: NSDictionary = body!["blob"] as! NSDictionary
-                if let blob = try? CreateBlobResponse(json: appString as! [String : Any]) {
-                    completion(blob)
+                if error != nil {
+                    completion({throw error!})
+                } else if let blob = try? CreateBlobResponse(json: appString as! [String : Any]) {
+                    completion({blob})
                 }
             }
         }
     }
     
-    public func uploadChunk(upload_id id: String, chunk_data: [UInt8], offset: Int, length: Int, completion: @escaping (_ repository: CreateBlobResponse?) -> ()) {
+    public func uploadChunk(upload_id id: String, chunk_data: [UInt8], offset: Int, length: Int, completion: @escaping (_ inner: () throws -> CreateBlobResponse) -> Void) {
         let data = NSData(bytes: chunk_data, length: chunk_data.count)
         putResource(path: "/blobs/\(id)", json: data, length: length, offset: offset) {
             (data, error) in
             if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let appString: NSDictionary = body!["blob"] as! NSDictionary
-                if let blob = try? CreateBlobResponse(json: appString as! [String : Any]) {
-                    completion(blob)
+                if error != nil {
+                    completion({throw error!})
+                } else if let blob = try? CreateBlobResponse(json: appString as! [String : Any]) {
+                    completion({blob})
                 }
             }
         }
     }
     
-    public func commitUpload(upload_id: String, completion: @escaping (_ repository: Blob?) -> ()){
+    public func commitUpload(upload_id: String, completion: @escaping (_ inner: () throws -> Blob) -> Void){
         var dict = NSDictionary()
         dict = ["upload_id": upload_id]
         postResource(path: "/blobs/commit", json: dict.returnJson()) {
@@ -66,14 +83,16 @@ open class Blobs: ChinoBaseAPI{
             if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let appString: NSDictionary = body!["blob"] as! NSDictionary
-                if let blob = try? Blob(json: appString as! [String : Any]) {
-                    completion(blob)
+                if error != nil {
+                    completion({throw error!})
+                } else if let blob = try? Blob(json: appString as! [String : Any]) {
+                    completion({blob})
                 }
             }
         }
     }
     
-    public func get(blob_id id: String, destination: String, completion: @escaping (_ repository: GetBlobResponse?) -> ()){
+    public func get(blob_id id: String, destination: String, completion: @escaping (_ inner: () throws -> GetBlobResponse) -> Void){
         let config = URLSessionConfiguration.default // Session Configuration
         let session = URLSession(configuration: config) // Load configuration into Session
         let url = URL(string: self.url+"/blobs/\(id)")!
@@ -112,11 +131,12 @@ open class Blobs: ChinoBaseAPI{
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
                         print("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion({throw error!})
                     }
                 }
             }
             // Call your closure
-            completion(blobResponse)
+            completion({blobResponse})
         }
         task.resume()
     }
@@ -124,7 +144,8 @@ open class Blobs: ChinoBaseAPI{
     public func deleteBlob(blob_id id: String, completion: @escaping (_ result: String?) -> ()) {
         deleteResource(path: "/blobs/\(id)", force: false) {
             (result) in
-            completion(result)
+                completion(result)
+
         }
     }
     

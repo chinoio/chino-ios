@@ -10,66 +10,76 @@ import Foundation
 
 open class Groups: ChinoBaseAPI{
     
-    public func getGroup(group_id id: String, completion: @escaping (_ schema: Group?) -> ()) {
+    public func getGroup(group_id id: String, completion: @escaping (_ inner: () throws -> Group) -> Void) {
         getResource(path: "/groups/"+id, offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let groupString: NSDictionary = body!["group"] as! NSDictionary
                 if let group = try? Group(json: groupString as! [String : Any]) {
-                    completion(group)
+                    completion({group})
                 }
             }
         }
     }
     
-    public func listGroups(completion: @escaping (_ schemas: GetGroupsResponse?) -> ()) {
+    public func listGroups(completion: @escaping (_ inner: () throws -> GetGroupsResponse) -> Void) {
         getResource(path: "/groups", offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let groups = try? GetGroupsResponse(json: body!) {
-                    completion(groups)
+                    completion({groups})
                 }
             }
         }
     }
     
-    public func listGroups(offset: Int, limit: Int, completion: @escaping (_ schemas: GetGroupsResponse?) -> ()) {
+    public func listGroups(offset: Int, limit: Int, completion: @escaping (_ inner: () throws -> GetGroupsResponse) -> Void) {
         getResource(path: "/groups", offset: offset, limit: limit) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 if let groups = try? GetGroupsResponse(json: body!) {
-                    completion(groups)
+                    completion({groups})
                 }
             }
         }
     }
     
-    public func createGroup(groupName: String, attributes: NSDictionary, completion: @escaping (_ schema: Group?) -> ()) {
+    public func createGroup(groupName: String, attributes: NSDictionary, completion: @escaping (_ inner: () throws -> Group) -> Void) {
         let request = CreateGroupRequest(groupName: groupName, attributes: attributes)
         postResource(path: "/groups", json: request.toString()) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let groupString: NSDictionary = body!["group"] as! NSDictionary
                 if let group = try? Group(json: groupString as! [String : Any]) {
-                    completion(group)
+                    completion({group})
                 }
             }
         }
     }
     
-    public func updateGroup(group_id id: String, groupName: String, attributes: NSDictionary, completion: @escaping (_ schema: Group?) -> ()) {
+    public func updateGroup(group_id id: String, groupName: String, attributes: NSDictionary, completion: @escaping (_ inner: () throws -> Group) -> Void) {
         let request = CreateGroupRequest(groupName: groupName, attributes: attributes)
         putResource(path: "/groups/\(id)", json: request.toString()) {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
                 let groupString: NSDictionary = body!["group"] as! NSDictionary
                 if let group = try? Group(json: groupString as! [String : Any]) {
-                    completion(group)
+                    completion({group})
                 }
             }
         }
@@ -84,22 +94,26 @@ open class Groups: ChinoBaseAPI{
     
     //----------------------GROUP MEMBERSHIP------------------------------
     
-    public func addUserToGroup(user_id: String, group_id: String, completion: @escaping (_ result: String?) -> ()) {
+    public func addUserToGroup(user_id: String, group_id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
         postResource(path: "/groups/\(group_id)/users/\(user_id)", json: "") {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let result = json!["result"] as? String
-                completion(result)
+                completion({result!})
             }
         }
     }
     
-    public func addUserSchemaToGroup(user_schema_id: String, group_id: String, completion: @escaping (_ result: String?) -> ()) {
+    public func addUserSchemaToGroup(user_schema_id: String, group_id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
         postResource(path: "/groups/\(group_id)/user_schemas/\(user_schema_id)", json: "") {
             (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let result = json!["result"] as? String
-                completion(result)
+                completion({result!})
             }
         }
     }
