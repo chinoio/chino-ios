@@ -127,5 +127,3 @@ chino.repositories.createRepository(description: "test_repository_description") 
 // <---- While the call is executed the main thread continue to run
 
 ```  
-
-pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.0'
