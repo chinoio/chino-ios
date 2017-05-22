@@ -1654,6 +1654,23 @@ class ChinoOSXLibraryTests: XCTestCase {
         }
         while(check){}
         check = true
+        
+        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        
+        var fields = [Field]()
+        fields.append(Field(type: "", name: "", indexed: true))
+        let structure = UserSchemaStructure(fields: fields)
+        chino.user_schemas.createUserSchema(description: "", structure: structure) { (response) in
+            do{
+                _ = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+                XCTAssert((error as! ChinoError).code==400)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
     }
     
 //    func testPerformanceExample() {
