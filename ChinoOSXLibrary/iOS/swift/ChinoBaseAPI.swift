@@ -29,6 +29,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -59,6 +60,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -91,6 +93,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -123,6 +126,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -156,6 +160,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -188,6 +193,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -222,6 +228,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -254,6 +261,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
@@ -289,6 +297,7 @@ open class ChinoBaseAPI{
             // Everything in this block is happening on a separate thread.
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil , ChinoError(localizedDescription: error.localizedDescription, code: error._code))
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.

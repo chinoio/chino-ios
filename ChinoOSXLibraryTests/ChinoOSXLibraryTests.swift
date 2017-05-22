@@ -1617,6 +1617,43 @@ class ChinoOSXLibraryTests: XCTestCase {
         }
         while(check){}
         check = true
+        
+        chino = ChinoAPI(hostUrl: "", customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        chino.repositories.createRepository(description: "test") { (response) in
+            do{
+                _ = try response()
+                XCTFail()
+            } catch let error {
+                print((error as! ChinoError).toString())
+                check = false
+            }
+        }
+        while(check){}
+        check = true
+        
+        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: "")
+        chino.repositories.createRepository(description: "test") { (response) in
+            do{
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==401)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
+        
+        chino = ChinoAPI(hostUrl: Credentials.url, customerId: "", customerKey: Credentials.customer_key)
+        chino.repositories.createRepository(description: "test") { (response) in
+            do{
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==401)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
     }
     
 //    func testPerformanceExample() {
