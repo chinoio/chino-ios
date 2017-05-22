@@ -272,7 +272,7 @@ open class ChinoBaseAPI{
         task.resume()
     }
     
-    open func deleteResource(path: String, force: Bool, completion: @escaping (_ result: String?) -> ()){
+    open func deleteResource(path: String, force: Bool, completion: @escaping (_ result: String?, ChinoError?) -> ()){
         let config = URLSessionConfiguration.default // Session Configuration
         let session = URLSession(configuration: config) // Load configuration into Session
         let url: URL
@@ -292,11 +292,11 @@ open class ChinoBaseAPI{
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     // this won't happen until the data comes back from the remote call.
-                    completion("success")
+                    completion("success", nil)
                 } else {
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         let message = json!["message"] as? String
-                        completion("Chino Error: \(message ?? "problem unwrapping error message")!")
+                        completion(nil , ChinoError(localizedDescription: message!, code: httpResponse.statusCode))
                     }
                 }
             }

@@ -75,10 +75,14 @@ open class UserSchemas: ChinoBaseAPI{
         }
     }
     
-    public func deleteUserSchema(user_schema_id id: String, force: Bool, completion: @escaping (_ result: String?) -> ()) {
+    public func deleteUserSchema(user_schema_id id: String, force: Bool, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/user_schemas/\(id)", force: force) {
-            (result) in
-            completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
 }

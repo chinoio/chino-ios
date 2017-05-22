@@ -121,7 +121,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                 
                 //Test delete repository
                 self.chino.repositories.deleteRepository(repository_id: value.repository_id, force: true) { (response) in
-                    XCTAssert(response=="success")
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
+                    XCTAssert(result=="success")
                     repo_count = repo_count-1
                 }
             }
@@ -259,7 +265,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                 
                 //Test delete schema
                 self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (response) in
-                    XCTAssert(response=="success")
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
+                    XCTAssert(result=="success")
                     schema_counter = schema_counter-1
                 }
             }
@@ -268,7 +280,13 @@ class ChinoOSXLibraryTests: XCTestCase {
         
         check = true
         self.chino.repositories.deleteRepository(repository_id: repo_id, force: true) { (response) in
-            XCTAssert(response=="success")
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
             check=false
         }
         while(check){}
@@ -390,7 +408,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                 
                 //Test delete user_schema
                 self.chino.user_schemas.deleteUserSchema(user_schema_id: s.user_schema_id, force: true) { (response) in
-                    XCTAssert(response=="success")
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
+                    XCTAssert(result=="success")
                     schema_counter = schema_counter-1
                 }
             }
@@ -507,7 +531,13 @@ class ChinoOSXLibraryTests: XCTestCase {
             for u in users.users {
                 XCTAssert(assertValidUser(user: u))
                 //Test delete user
-                self.chino.users.deleteUser(user_id: (user?.user_id)!, force: true) { (result) in
+                self.chino.users.deleteUser(user_id: (user?.user_id)!, force: true) { (response) in
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
                     XCTAssert(result=="success")
                     user_counter = user_counter-1
                 }
@@ -516,7 +546,13 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(user_counter>0){}
         
         check = true
-        self.chino.user_schemas.deleteUserSchema(user_schema_id: schema_id, force: true) { (result) in
+        self.chino.user_schemas.deleteUserSchema(user_schema_id: schema_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             check=false
         }
@@ -653,7 +689,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                 XCTAssert(assertValidCreateDocumentResponse(doc: d))
                 
                 //Test delete document
-                self.chino.documents.deleteDocument(document_id: d.document_id, force: true) { (result) in
+                self.chino.documents.deleteDocument(document_id: d.document_id, force: true) { (response) in
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
                     XCTAssert(result=="success")
                     print("Document deleted!")
                     doc_counter = doc_counter-1
@@ -664,7 +706,13 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(doc_counter>0){}
         
         check = true
-        self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (result) in
+        self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             print("Schema deleted!")
             check = false
@@ -672,7 +720,13 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (result) in
+        self.chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             print("Repository deleted!")
             check=false
@@ -752,7 +806,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                 XCTAssert(assertValidGroup(group: g))
                 
                 //Test delete group
-                self.chino.groups.deleteGroup(group_id: g.group_id, force: true) { (result) in
+                self.chino.groups.deleteGroup(group_id: g.group_id, force: true) { (response) in
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
                     XCTAssert(result=="success")
                     group_counter = group_counter-1
                     check=false
@@ -810,7 +870,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                             XCTAssert(assertValidCollection(collection: c))
                             
                             //Test delete collection
-                            self.chino.collections.deleteCollection(collection_id: c.collection_id, force: true) { (result) in
+                            self.chino.collections.deleteCollection(collection_id: c.collection_id, force: true) { (response) in
+                                var result: String!
+                                do{
+                                    result = try response()
+                                } catch let error {
+                                    print((error as! ChinoError).toString())
+                                }
                                 XCTAssert(result=="success")
                                 check=false
                             }
@@ -907,7 +973,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                             for d in docs.documents {
                                 XCTAssert(assertValidCreateDocumentResponse(doc: d))
                                 
-                                self.chino.documents.deleteDocument(document_id: d.document_id, force: true) { (result) in
+                                self.chino.documents.deleteDocument(document_id: d.document_id, force: true) { (response) in
+                                    var result: String!
+                                    do{
+                                        result = try response()
+                                    } catch let error {
+                                        print((error as! ChinoError).toString())
+                                    }
                                     XCTAssert(result=="success")
                                     print("Document deleted!")
                                     count = count-1
@@ -926,10 +998,22 @@ class ChinoOSXLibraryTests: XCTestCase {
             
         }
         var check_delete = true
-        self.chino.schemas.deleteSchema(schema_id: schema_id, force: true) { (result) in
+        self.chino.schemas.deleteSchema(schema_id: schema_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             print("Schema deleted!")
-            self.chino.repositories.deleteRepository(repository_id: repo_id, force: true) { (result) in
+            self.chino.repositories.deleteRepository(repository_id: repo_id, force: true) { (response) in
+                var result: String!
+                do{
+                    result = try response()
+                } catch let error {
+                    print((error as! ChinoError).toString())
+                }
                 XCTAssert(result=="success")
                 print("Repository deleted!")
                 check_delete=false
@@ -1004,7 +1088,13 @@ class ChinoOSXLibraryTests: XCTestCase {
                 XCTAssert(assertValidListApplicationsObject(app: a))
                         
                 //Test delete application
-                self.chino.applications.deleteApplication(application_id: a.app_id, force: true) { (result) in
+                self.chino.applications.deleteApplication(application_id: a.app_id, force: true) { (response) in
+                    var result: String!
+                    do{
+                        result = try response()
+                    } catch let error {
+                        print((error as! ChinoError).toString())
+                    }
                     XCTAssert(result=="success")
                     app_counter = app_counter-1
                     check = false
@@ -1111,21 +1201,39 @@ class ChinoOSXLibraryTests: XCTestCase {
         
         self.chino=ChinoAPI.init(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
             
-        self.chino.users.deleteUser(user_id: user.user_id, force: true) { (result) in
+        self.chino.users.deleteUser(user_id: user.user_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             check = false
         }
         while(check){}
         check = true
         
-        self.chino.user_schemas.deleteUserSchema(user_schema_id: schema.user_schema_id, force: true) { (result) in
+        self.chino.user_schemas.deleteUserSchema(user_schema_id: schema.user_schema_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             check = false
         }
         while(check){}
         check = true
         
-        self.chino.applications.deleteApplication(application_id: app.app_id, force: true) { (result) in
+        self.chino.applications.deleteApplication(application_id: app.app_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
             XCTAssert(result=="success")
             check=false
         }
@@ -1282,36 +1390,66 @@ class ChinoOSXLibraryTests: XCTestCase {
         
         chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
 
-        chino.documents.deleteDocument(document_id: document.document_id, force: true) { (result) in
-            XCTAssert(result == "success")
+        chino.documents.deleteDocument(document_id: document.document_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
             check = false
         }
         while(check){}
         check = true
         
-        chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (result) in
-            XCTAssert(result == "success")
+        chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
             check = false
         }
         while(check){}
         check = true
         
-        chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (result) in
-            XCTAssert(result == "success")
+        chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
             check = false
         }
         while(check){}
         check = true
         
-        chino.users.deleteUser(user_id: user.user_id, force: true) { (result) in
-            XCTAssert(result == "success")
+        chino.users.deleteUser(user_id: user.user_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
             check = false
         }
         while(check){}
         check = true
         
-        chino.user_schemas.deleteUserSchema(user_schema_id: user_schema.user_schema_id, force: true) { (result) in
-            XCTAssert(result == "success")
+        chino.user_schemas.deleteUserSchema(user_schema_id: user_schema.user_schema_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
             check = false
         }
         while(check){}
@@ -1375,13 +1513,38 @@ class ChinoOSXLibraryTests: XCTestCase {
                             print("MD5: "+(blobResponse?.md5)!)
                             print("SHA1: "+(blobResponse?.sha1)!)
                             
-                            self.chino.blobs.deleteBlob(blob_id: (blob?.blob_id)!) { (result) in
+                            self.chino.blobs.deleteBlob(blob_id: (blob?.blob_id)!) { (response) in
+                                var result: String!
+                                do{
+                                    result = try response()
+                                } catch let error {
+                                    print((error as! ChinoError).toString())
+                                }
+                                XCTAssert(result=="success")
                                 print("Delete blob: "+result!)
-                                self.chino.documents.deleteDocument(document_id: doc.document_id, force: true) { (result) in
+                                self.chino.documents.deleteDocument(document_id: doc.document_id, force: true) { (response) in
+                                    do{
+                                        result = try response()
+                                    } catch let error {
+                                        print((error as! ChinoError).toString())
+                                    }
+                                    XCTAssert(result=="success")
                                     print("Delete document: "+result!)
-                                    self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (result) in
+                                    self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (response) in
+                                        do{
+                                            result = try response()
+                                        } catch let error {
+                                            print((error as! ChinoError).toString())
+                                        }
+                                        XCTAssert(result=="success")
                                         print("Delete schema: "+result!)
-                                        self.chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (result) in
+                                        self.chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (response) in
+                                            do{
+                                                result = try response()
+                                            } catch let error {
+                                                print((error as! ChinoError).toString())
+                                            }
+                                            XCTAssert(result=="success")
                                             print("Delete repo: "+result!)
                                             check = false
                                         }
@@ -1396,6 +1559,64 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){
             
         }
+    }
+    
+    func testErrors(){
+        var check = true
+        chino.repositories.listRepositories(offset: 0, limit: 101) { (response) in
+            do {
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==400)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
+        
+        chino.repositories.listRepositories(offset: -1, limit: 50) { (response) in
+            do {
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==400)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
+        
+        chino.repositories.getRepository(repository_id: "") { (response) in
+            do {
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==404)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
+        
+        chino.repositories.updateRepository(repository_id: "", description: "") { (response) in
+            do {
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==404)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
+        
+        chino.repositories.deleteRepository(repository_id: "", force: true) { (response) in
+            do{
+                _ = try response()
+            } catch let error {
+                XCTAssert((error as! ChinoError).code==404)
+                check = false
+            }
+        }
+        while(check){}
+        check = true
     }
     
 //    func testPerformanceExample() {

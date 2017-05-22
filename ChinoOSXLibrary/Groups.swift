@@ -85,10 +85,14 @@ open class Groups: ChinoBaseAPI{
         }
     }
     
-    public func deleteGroup(group_id id: String, force: Bool, completion: @escaping (_ result: String?) -> ()) {
+    public func deleteGroup(group_id id: String, force: Bool, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/groups/\(id)", force: force) {
-            (result) in
-            completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
     
@@ -118,17 +122,25 @@ open class Groups: ChinoBaseAPI{
         }
     }
     
-    public func removeUserFromGroup(user_id: String, group_id: String, completion: @escaping (_ result: String?) -> ()) {
+    public func removeUserFromGroup(user_id: String, group_id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/groups/\(group_id)/users/\(user_id)", force: false) {
-            (result) in
-            completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
     
-    public func removeUserSchemaFromGroup(user_schema_id: String, group_id: String, completion: @escaping (_ result: String?) -> ()) {
+    public func removeUserSchemaFromGroup(user_schema_id: String, group_id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/groups/\(group_id)/user_schemas/\(user_schema_id)", force: false) {
-            (result) in
-            completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
 }

@@ -141,11 +141,14 @@ open class Blobs: ChinoBaseAPI{
         task.resume()
     }
     
-    public func deleteBlob(blob_id id: String, completion: @escaping (_ result: String?) -> ()) {
+    public func deleteBlob(blob_id id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/blobs/\(id)", force: false) {
-            (result) in
-                completion(result)
-
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
     

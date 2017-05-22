@@ -85,10 +85,14 @@ open class Applications: ChinoBaseAPI{
         }
     }
     
-    public func deleteApplication(application_id id: String, force: Bool, completion: @escaping (_ result: String?) -> ()) {
+    public func deleteApplication(application_id id: String, force: Bool, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/auth/applications/\(id)", force: force) {
-            (result) in
-            completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
 }

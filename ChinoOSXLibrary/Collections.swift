@@ -85,27 +85,37 @@ open class Collections: ChinoBaseAPI{
         }
     }
     
-    public func deleteCollection(collection_id id: String, force: Bool, completion: @escaping (_ result: String?) -> ()) {
+    public func deleteCollection(collection_id id: String, force: Bool, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/collections/\(id)", force: force) {
-            (result) in
-            completion(result)
-        }
-    }
-    
-    public func addDocument(document_id: String, collection_id: String, completion: @escaping (_ result: String?) -> ()) {
-        postResource(path: "/collections/\(collection_id)/documents/\(document_id)", json: "") {
-            (data, error) in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                let result = json!["result"] as? String
-                completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
             }
         }
     }
     
-    public func removeDocument(document_id: String, collection_id: String, completion: @escaping (_ result: String?) -> ()) {
+    public func addDocument(document_id: String, collection_id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
+        postResource(path: "/collections/\(collection_id)/documents/\(document_id)", json: "") {
+            (data, error) in
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                let result = json!["result"] as? String
+                completion({result!})
+            }
+        }
+    }
+    
+    public func removeDocument(document_id: String, collection_id: String, completion: @escaping (_ inner: () throws -> String) -> Void) {
         deleteResource(path: "/collections/\(collection_id)/documents/\(document_id)", force: false) {
-            (result) in
-            completion(result)
+            (result, error) in
+            if error != nil {
+                completion({throw error!})
+            } else {
+                completion({result!})
+            }
         }
     }
     
