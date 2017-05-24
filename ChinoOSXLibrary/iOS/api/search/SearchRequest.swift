@@ -11,7 +11,7 @@ import Foundation
 open class SearchRequest {
     
     public enum ResultTypeValues {
-        case full_content, no_content, only_id, count, exists
+        case full_content, no_content, only_id, count, exists, username_exists
         
         func returnValue(value: ResultTypeValues) -> String {
             switch value {
@@ -25,6 +25,8 @@ open class SearchRequest {
                 return "COUNT"
             case .exists:
                 return "EXISTS"
+            case .username_exists:
+                return "USERNAME_EXISTS"
             }
         }
     }

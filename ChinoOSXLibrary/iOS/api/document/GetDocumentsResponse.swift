@@ -14,6 +14,7 @@ open class GetDocumentsResponse{
     open let totalCount: Int
     open let limit: Int
     open let offset: Int
+    open var ids = [String]()
     
     init(){
         self.documents = []
@@ -21,6 +22,7 @@ open class GetDocumentsResponse{
         self.totalCount = 0
         self.limit = 0
         self.offset = 0
+        self.ids = []
     }
     
     init(documents: [CreateDocumentResponse], count: Int, totalCount: Int, limit: Int, offset: Int){
@@ -29,6 +31,16 @@ open class GetDocumentsResponse{
         self.totalCount = totalCount
         self.limit = limit
         self.offset = offset
+        self.ids = []
+    }
+    
+    init(ids: [String], count: Int, totalCount: Int, limit: Int, offset: Int){
+        self.documents = []
+        self.count = count
+        self.totalCount = totalCount
+        self.limit = limit
+        self.offset = offset
+        self.ids = ids
     }
 }
 
@@ -67,5 +79,39 @@ extension GetDocumentsResponse {
         
         // Initialize properties
         self.init(documents: documents, count: count, totalCount: totalCount, limit: limit, offset: offset)
+    }
+    
+    convenience init(json_ids: [String: Any]) throws {
+        
+        // Extract ids
+        var ids: [String] = []
+        
+        let ss = json_ids["IDs"] as! NSArray
+        for value in ss {
+            ids.append(value as! String)
+        }
+        
+        // Extract count
+        guard let count = json_ids["count"] as? Int else {
+            throw SerializationError.missing("count")
+        }
+        
+        // Extract totalCount
+        guard let totalCount = json_ids["total_count"] as? Int else {
+            throw SerializationError.missing("total_count")
+        }
+        
+        // Extract limit
+        guard let limit = json_ids["limit"] as? Int else {
+            throw SerializationError.missing("limit")
+        }
+        
+        // Extract offset
+        guard let offset = json_ids["offset"] as? Int else {
+            throw SerializationError.missing("offset")
+        }
+        
+        // Initialize properties
+        self.init(ids: ids, count: count, totalCount: totalCount, limit: limit, offset: offset)
     }
 }

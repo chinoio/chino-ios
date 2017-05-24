@@ -894,134 +894,302 @@ class ChinoOSXLibraryTests: XCTestCase {
         
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let description = "test_description"
+        let schema_description = "base_visit"
+        let user_schema_description = "user_schema"
         var check=true
-        var schema_id = ""
-        var repo_id = ""
+        var repo: Repository!
+        var schema: Schema!
+        var user_schema: UserSchema!
+        var doctor: User!
+        var first_patient: User!
+        var second_patient: User!
+        var first_document: CreateDocumentResponse!
+        var second_document: CreateDocumentResponse!
+        var third_document: CreateDocumentResponse!
         
-        var fields = [Field]()
-        fields.append(Field(type: "string", name: "name", indexed: true))
-        fields.append(Field(type: "string", name: "last_name", indexed: true))
-        fields.append(Field(type: "integer", name: "test_integer", indexed: true))
-        let structure: SchemaStructure = SchemaStructure(fields: fields)
-        
-        chino.repositories.createRepository(description: "test-repo-description") { (response) in
-            var repo: Repository!
+        //Create a Repository
+        chino.repositories.createRepository(description: "tutorial-search") { (response) in
             do{
                 repo = try response()
+                check = false
             } catch let error {
                 print((error as! ChinoError).toString())
             }
-            repo_id = repo.repository_id
-            self.chino.schemas.createSchema(repository_id: repo.repository_id, description: description, structure: structure) { (response) in
-                var schema: Schema!
-                do{
-                    schema = try response()
-                } catch let error {
-                    print((error as! ChinoError).toString())
-                }
-                XCTAssert(assertValidSchema(schema: schema))
-                XCTAssert(schema.description==description)
-
-                schema_id = schema.schema_id
-                var content = ["name": "Giacomino", "last_name": "Storti", "test_integer": 123] as [String : Any]
-                
-                sleep(2)
-                
-                self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
-                    var doc: CreateDocumentResponse!
-                    do{
-                        doc = try response()
-                    } catch let error {
-                        print((error as! ChinoError).toString())
-                    }
-                    XCTAssert(assertValidCreateDocumentResponse(doc: doc))
-                    
-                    content = ["name": "Mario", "last_name": "Rossi", "test_integer": 1234]
-
-                    self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
-                        var doc: CreateDocumentResponse!
-                        do{
-                            doc = try response()
-                        } catch let error {
-                            print((error as! ChinoError).toString())
-                        }
-                        XCTAssert(assertValidCreateDocumentResponse(doc: doc))
-                        
-                        //Test search documents
-                        let filter = [FilterOption(type: FilterOption.TypeValues.equal, field: "name", value: "Mario")]
-                        let sort = [SortOption(field: "test_integer", order: "asc")]
-                        let request = SearchRequest(result_type: SearchRequest.ResultTypeValues.full_content, filter_type: SearchRequest.FilterTypeValues.or, sort: sort, filter: filter)
-                        self.chino.search.searchDocuments(search_request: request, schema_id: schema.schema_id) { (response) in
-                            var documents: GetDocumentsResponse!
-                            do{
-                                documents = try response()
-                            } catch let error {
-                                print((error as! ChinoError).toString())
-                            }
-                            print(documents)
-                        }
-                    
-                        self.chino.documents.listDocumentsWithoutContent(schema_id: schema.schema_id) { (response) in
-                            var docs: GetDocumentsResponse!
-                            do{
-                                docs = try response()
-                            } catch let error {
-                                print((error as! ChinoError).toString())
-                            }
-                            var count = docs.count
-                            for d in docs.documents {
-                                XCTAssert(assertValidCreateDocumentResponse(doc: d))
-                                
-                                self.chino.documents.deleteDocument(document_id: d.document_id, force: true) { (response) in
-                                    var result: String!
-                                    do{
-                                        result = try response()
-                                    } catch let error {
-                                        print((error as! ChinoError).toString())
-                                    }
-                                    XCTAssert(result=="success")
-                                    print("Document deleted!")
-                                    count = count-1
-                                }
-                            }
-                            while(count>0){
-                                
-                            }
-                            check=false
-                        }
-                    }
-                }
-            }
         }
-        while(check){
-            
-        }
-        var check_delete = true
-        self.chino.schemas.deleteSchema(schema_id: schema_id, force: true) { (response) in
-            var result: String!
+        while(check) {}
+        check = true
+        
+        var fields = [Field]()
+        fields.append(Field(type: "string", name: "patient_id", indexed: true))
+        fields.append(Field(type: "string", name: "doctor_id", indexed: true))
+        fields.append(Field(type: "string", name: "visit_type", indexed: true))
+        fields.append(Field(type: "text", name: "visit"))
+        fields.append(Field(type: "datetime", name: "date", indexed: true))
+        let structure: SchemaStructure = SchemaStructure(fields: fields)
+        
+        //Create a Schema
+        self.chino.schemas.createSchema(repository_id: repo.repository_id, description: schema_description, structure: structure) { (response) in
             do{
-                result = try response()
+                schema = try response()
             } catch let error {
                 print((error as! ChinoError).toString())
             }
-            XCTAssert(result=="success")
-            print("Schema deleted!")
-            self.chino.repositories.deleteRepository(repository_id: repo_id, force: true) { (response) in
-                var result: String!
-                do{
-                    result = try response()
-                } catch let error {
-                    print((error as! ChinoError).toString())
-                }
-                XCTAssert(result=="success")
-                print("Repository deleted!")
-                check_delete=false
+            XCTAssert(assertValidSchema(schema: schema))
+            XCTAssert(schema.description==schema_description)
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        fields = [Field]()
+        fields.append(Field(type: "string", name: "name", indexed: true))
+        fields.append(Field(type: "string", name: "last_name", indexed: true))
+        fields.append(Field(type: "date", name: "date_birth", indexed: true))
+        fields.append(Field(type: "string", name: "role"))
+        let userSchemaStructure: UserSchemaStructure = UserSchemaStructure(fields: fields)
+        
+        //Create a UserSchema
+        self.chino.user_schemas.createUserSchema(description: user_schema_description, structure: userSchemaStructure) { (response) in
+            do{
+                user_schema = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
             }
+            XCTAssert(assertValidUserSchema(user_schema: user_schema))
+            XCTAssert(user_schema.description==user_schema_description)
+            check = false
         }
-        while(check_delete){
-            
+        while(check) {}
+        check = true
+        
+        sleep(3)
+        
+        //Create doctor
+
+        var attributes = ["name": "doctor_name", "last_name": "doctor_last_name", "date_birth": "1960-01-01", "role": "doctor"] as [String : Any]
+        
+        chino.users.createUser(username: "doctor_username", password: "doctor_password", user_schema_id: user_schema.user_schema_id, attributes: attributes as NSDictionary) { (response) in
+            do{
+                doctor = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidUser(user: doctor))
+            check = false
         }
+        while(check) {}
+        check = true
+        
+        //Create first patient
+        
+        attributes = ["name": "first_patient_name", "last_name": "first_patient_last_name", "date_birth": "1960-01-01", "role": "patient"] as [String : Any]
+        
+        chino.users.createUser(username: "first_patient_username", password: "first_patient_password", user_schema_id: user_schema.user_schema_id, attributes: attributes as NSDictionary) { (response) in
+            do{
+                first_patient = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidUser(user: first_patient))
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Create second patient
+        
+        attributes = ["name": "second_patient_name", "last_name": "second_patient_last_name", "date_birth": "1960-01-01", "role": "patient"] as [String : Any]
+        
+        chino.users.createUser(username: "second_patient_username", password: "second_patient_password", user_schema_id: user_schema.user_schema_id, attributes: attributes as NSDictionary) { (response) in
+            do{
+                second_patient = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidUser(user: second_patient))
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Create first document
+        
+        var content = ["patient_id": first_patient.user_id, "doctor_id": doctor.user_id, "visit_type": "routine", "visit": "visit_description", "date": "2017-01-04T10:25:36"] as [String : Any]
+        
+        self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
+            do{
+                first_document = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidCreateDocumentResponse(doc: first_document))
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Create second document
+        
+        content = ["patient_id": first_patient.user_id, "doctor_id": doctor.user_id, "visit_type": "routine", "visit": "visit_description", "date": "2017-01-06T12:03:45"] as [String : Any]
+        
+        self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
+            do{
+                second_document = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidCreateDocumentResponse(doc: second_document))
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Create third document
+        
+        content = ["patient_id": second_patient.user_id, "doctor_id": doctor.user_id, "visit_type": "insurance_exams", "visit": "visit_description", "date": "2017-01-06T15:03:34"] as [String : Any]
+        
+        self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
+            do{
+                third_document = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidCreateDocumentResponse(doc: third_document))
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Search all Documents with the id of a specific User
+        print("Search all Documents with the id of a specific User")
+        var filter = [FilterOption(type: FilterOption.TypeValues.equal, field: "patient_id", value: first_patient.user_id)]
+        var sort = [SortOption(field: "date", order: "asc")]
+        var request = SearchRequest(result_type: SearchRequest.ResultTypeValues.full_content, filter_type: SearchRequest.FilterTypeValues.or, sort: sort, filter: filter)
+        self.chino.search.searchDocuments(search_request: request, schema_id: schema.schema_id) { (response) in
+            var documents: GetDocumentsResponse!
+            do{
+                documents = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            print(documents)
+            check = false
+        }
+        
+        while(check) {}
+        check = true
+        
+        //Search all Documents created after a specific date
+        print("Search all Documents created after a specific date")
+        filter = [FilterOption(type: FilterOption.TypeValues.greater_than, field: "date", value: "2017-01-05T00:00:00")]
+        sort = [SortOption(field: "date", order: "asc")]
+        request = SearchRequest(result_type: SearchRequest.ResultTypeValues.full_content, filter_type: SearchRequest.FilterTypeValues.or, sort: sort, filter: filter)
+        chino.search.searchDocuments(search_request: request, schema_id: schema.schema_id) { (response) in
+            var documents: GetDocumentsResponse!
+            do{
+                documents = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            print(documents)
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Search User with a specific name
+        print("Search User with a specific name")
+        filter = [FilterOption(type: FilterOption.TypeValues.equal, field: "name", value: "first_patient_name")]
+        sort = [SortOption(field: "date_birth", order: "asc")]
+        request = SearchRequest(result_type: SearchRequest.ResultTypeValues.full_content, filter_type: SearchRequest.FilterTypeValues.and, sort: sort, filter: filter)
+        chino.search.searchUsers(search_request: request, user_schema_id: user_schema.user_schema_id) { (response) in
+            var users: GetUsersResponse!
+            do{
+                users = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            print(users)
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Search if a User with a specific username exists
+        print("Search if a User with a specific name exists")
+        filter = [FilterOption(type: FilterOption.TypeValues.equal, field: "username", value: "first_patient_username")]
+        sort = [SortOption(field: "date_birth", order: "asc")]
+        request = SearchRequest(result_type: SearchRequest.ResultTypeValues.username_exists, filter_type: SearchRequest.FilterTypeValues.and, sort: sort, filter: filter)
+        chino.search.searchUsers(search_request: request, user_schema_id: user_schema.user_schema_id) { (response) in
+            var users: GetUsersResponse!
+            do{
+                users = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(users.exists==true)
+            print(users)
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Search if a User with a specific name exists
+        print("Search if a User with a specific name exists")
+        filter = [FilterOption(type: FilterOption.TypeValues.equal, field: "name", value: "first_patient_name")]
+        sort = [SortOption(field: "date_birth", order: "asc")]
+        request = SearchRequest(result_type: SearchRequest.ResultTypeValues.exists, filter_type: SearchRequest.FilterTypeValues.and, sort: sort, filter: filter)
+        chino.search.searchUsers(search_request: request, user_schema_id: user_schema.user_schema_id) { (response) in
+            var users: GetUsersResponse!
+            do{
+                users = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(users.exists==true)
+            print(users)
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Search for Documents created in a specific day
+        print("Search all Documents created after a specific date")
+        filter = [FilterOption(type: FilterOption.TypeValues.greater_than, field: "date", value:   "2017-01-04T00:00:00"),
+                  FilterOption(type: FilterOption.TypeValues.lower_than, field: "date", value: "2017-01-05T00:00:00")]
+        sort = [SortOption(field: "date", order: "asc")]
+        request = SearchRequest(result_type: SearchRequest.ResultTypeValues.full_content, filter_type: SearchRequest.FilterTypeValues.and, sort: sort, filter: filter)
+        chino.search.searchDocuments(search_request: request, schema_id: schema.schema_id) { (response) in
+            var documents: GetDocumentsResponse!
+            do{
+                documents = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            print(documents)
+            check = false
+        }
+        while(check) {}
+        check = true
+        
+        //Search for Documents created after a specific date or with a visit_type pertaining to a list
+        print("Search all Documents created after a specific date")
+        filter = [FilterOption(type: FilterOption.TypeValues.greater_than, field: "date", value:   "2017-01-06T15:00:00"),
+                  FilterOption(type: FilterOption.TypeValues.in_list, field: "visit_type", value: ["routine","physical_insurance_exams"])]
+        sort = [SortOption(field: "date", order: "asc")]
+        request = SearchRequest(result_type: SearchRequest.ResultTypeValues.only_id, filter_type: SearchRequest.FilterTypeValues.or, sort: sort, filter: filter)
+        chino.search.searchDocuments(search_request: request, schema_id: schema.schema_id) { (response) in
+            var documents: GetDocumentsResponse!
+            do{
+                documents = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            print(documents)
+            check = false
+        }
+        while(check) {}
+        check = true
     }
     
     func testApplications(){

@@ -14,6 +14,7 @@ open class GetUsersResponse{
     open let totalCount: Int
     open let limit: Int
     open let offset: Int
+    open let exists: Bool
     
     init(){
         self.users = []
@@ -21,6 +22,7 @@ open class GetUsersResponse{
         self.totalCount = 0
         self.limit = 0
         self.offset = 0
+        self.exists = false
     }
     
     init(users: [User], count: Int, totalCount: Int, limit: Int, offset: Int){
@@ -29,6 +31,16 @@ open class GetUsersResponse{
         self.totalCount = totalCount
         self.limit = limit
         self.offset = offset
+        self.exists = false
+    }
+    
+    init(exists: Bool) {
+        self.users = []
+        self.count = 0
+        self.totalCount = 0
+        self.limit = 0
+        self.offset = 0
+        self.exists = exists
     }
 }
 
@@ -67,5 +79,16 @@ extension GetUsersResponse {
         
         // Initialize properties
         self.init(users: users, count: count, totalCount: totalCount, limit: limit, offset: offset)
+    }
+    
+    convenience init(json_exists: [String: Any]) throws {
+        
+        // Extract exists
+        guard let exists = json_exists["exists"] as? Bool else {
+            throw SerializationError.missing("exists")
+        }
+        
+        // Initialize properties
+        self.init(exists: exists)
     }
 }

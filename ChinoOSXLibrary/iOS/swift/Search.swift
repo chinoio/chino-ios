@@ -17,8 +17,14 @@ open class Search: ChinoBaseAPI{
                 completion({throw error!})
             } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
-                if let documents = try? GetDocumentsResponse(json: body!) {
-                    completion({documents})
+                if search_request.result_type == SearchRequest.ResultTypeValues.only_id {
+                    if let documents = try? GetDocumentsResponse(json_ids: body!) {
+                        completion({documents})
+                    }
+                } else {
+                    if let documents = try? GetDocumentsResponse(json: body!) {
+                        completion({documents})
+                    }
                 }
             }
         }
@@ -31,8 +37,14 @@ open class Search: ChinoBaseAPI{
                 completion({throw error!})
             } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
-                if let documents = try? GetDocumentsResponse(json: body!) {
-                    completion({documents})
+                if search_request.result_type == SearchRequest.ResultTypeValues.only_id {
+                    if let documents = try? GetDocumentsResponse(json_ids: body!) {
+                        completion({documents})
+                    }
+                } else {
+                    if let documents = try? GetDocumentsResponse(json: body!) {
+                        completion({documents})
+                    }
                 }
             }
         }
@@ -45,8 +57,14 @@ open class Search: ChinoBaseAPI{
                 completion({throw error!})
             } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
-                if let users = try? GetUsersResponse(json: body!) {
-                    completion({users})
+                if search_request.result_type == SearchRequest.ResultTypeValues.exists ||  search_request.result_type == SearchRequest.ResultTypeValues.username_exists {
+                    if let users = try? GetUsersResponse(json_exists: body!) {
+                        completion({users})
+                    }
+                } else {
+                    if let users = try? GetUsersResponse(json: body!) {
+                        completion({users})
+                    }
                 }
             }
         }
@@ -59,8 +77,14 @@ open class Search: ChinoBaseAPI{
                 completion({throw error!})
             } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let body = json!["data"] as? [String:Any]
-                if let users = try? GetUsersResponse(json: body!) {
-                    completion({users})
+                if search_request.result_type == SearchRequest.ResultTypeValues.exists ||  search_request.result_type == SearchRequest.ResultTypeValues.username_exists {
+                    if let users = try? GetUsersResponse(json_exists: body!) {
+                        completion({users})
+                    }
+                } else {
+                    if let users = try? GetUsersResponse(json: body!) {
+                        completion({users})
+                    }
                 }
             }
         }
