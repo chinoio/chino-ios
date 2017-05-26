@@ -11,34 +11,61 @@ import CommonCrypto
 
 open class Blobs: ChinoBaseAPI{
     
+    let chunkSize = 1024*1024
+    
     public func uploadBlob(path: String, document_id: String, field: String, file_name: String, completion: @escaping (_ inner: () throws -> Blob) -> Void){
         initUpload(document_id: document_id, field: field, file_name: file_name) { (createBlobResponse) in
     
+            var blobResponse: CreateBlobResponse!
+            do {
+                blobResponse = try createBlobResponse()
+            } catch let error{
+                completion({throw error})
+            }
+            
             var bytes = [UInt8]()
+            var currentFilePosition = 0
+            var blobChunkResponse: CreateBlobResponse!
+            var check = true
+            var rng: NSRange
+            
             if let data = NSData(contentsOfFile: path+file_name) {
                 
-                var buffer = [UInt8](repeating: 0, count: data.length)
-                data.getBytes(&buffer, length: data.length)
-                bytes = buffer
+                var distanceFromEnd = data.length
+                var buffer = [UInt8]()
                 
-                var blobResponse: CreateBlobResponse!
-                do {
-                    blobResponse = try createBlobResponse()
-                } catch let error{
-                    completion({throw error})
-                }
-                
-                self.uploadChunk(upload_id: (blobResponse.upload_id), chunk_data: bytes, offset: 0, length: data.length) { (response) in
-                    var blobResponse: CreateBlobResponse!
-                    do {
-                        blobResponse = try response()
-                    } catch let error{
-                        completion({throw error})
+                while(currentFilePosition < data.length) {
+                    
+                    distanceFromEnd = data.length - currentFilePosition
+                    if distanceFromEnd > self.chunkSize {
+                        rng = NSRange(location: currentFilePosition, length: self.chunkSize)
+                        buffer = [UInt8](repeating: 0, count: self.chunkSize)
+                        data.getBytes(&buffer, range: rng)
+                    } else {
+                        rng = NSRange(location: currentFilePosition, length: distanceFromEnd)
+                        buffer = [UInt8](repeating: 0, count: distanceFromEnd)
+                        data.getBytes(&buffer, range: rng)
                     }
-                    self.commitUpload(upload_id: (blobResponse.upload_id)) { (blob) in
-                        completion(blob)
+                    
+                    bytes = buffer
+                    
+                    self.uploadChunk(upload_id: (blobResponse.upload_id), chunk_data: bytes, offset: currentFilePosition, length: bytes.count) { (response) in
+                        do {
+                            blobChunkResponse = try response()
+                            check = false
+                        } catch let error{
+                            completion({throw error})
+                        }
                     }
+                    while(check){}
+                    check = true
+                    currentFilePosition = currentFilePosition + bytes.count
                 }
+                self.commitUpload(upload_id: (blobChunkResponse.upload_id)) { (blob) in
+                    completion(blob)
+                    check = false
+                }
+                while(check){}
             }
         }
     }

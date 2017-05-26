@@ -1632,6 +1632,13 @@ class ChinoOSXLibraryTests: XCTestCase {
         let description = "test_description"
         var check=true
         
+        var schema: Schema!
+        var repo: Repository!
+        var doc: CreateDocumentResponse!
+        var blob: Blob!
+        var blobResponse: GetBlobResponse!
+        var result: String!
+        
         var fields = [Field]()
         fields.append(Field(type: "string", name: "name", indexed: true))
         fields.append(Field(type: "string", name: "last_name", indexed: true))
@@ -1640,95 +1647,119 @@ class ChinoOSXLibraryTests: XCTestCase {
         let structure: SchemaStructure = SchemaStructure(fields: fields)
         
         chino.repositories.createRepository(description: "test-repo-description") { (response) in
-            var repo: Repository!
             do{
                 repo = try response()
             } catch let error {
                 print((error as! ChinoError).toString())
             }
-            self.chino.schemas.createSchema(repository_id: repo.repository_id, description: description, structure: structure) { (response) in
-                var schema: Schema!
-                do{
-                    schema = try response()
-                } catch let error {
-                    print((error as! ChinoError).toString())
-                }
-                let content = ["name": "Giacomino", "last_name": "Storti", "test_integer": 123] as [String : Any]
-                
-                sleep(2)
-                
-                self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
-                    var doc: CreateDocumentResponse!
-                    do{
-                        doc = try response()
-                    } catch let error {
-                        print((error as! ChinoError).toString())
-                    }
-                    self.chino.blobs.uploadBlob(path: path, document_id: doc.document_id, field: "test_blob", file_name: name) { (response) in
-                        var blob: Blob!
-                        do{
-                            blob = try response()
-                        } catch let error {
-                            print((error as! ChinoError).toString())
-                        }
-                        self.chino.blobs.get(blob_id: (blob?.blob_id)!, destination: destination) { (response) in
-                            var blobResponse: GetBlobResponse!
-                            do{
-                                blobResponse = try response()
-                            } catch let error {
-                                print((error as! ChinoError).toString())
-                            }
-                            print("MD5: "+(blobResponse?.md5)!)
-                            print("SHA1: "+(blobResponse?.sha1)!)
-                            
-                            self.chino.blobs.deleteBlob(blob_id: (blob?.blob_id)!) { (response) in
-                                var result: String!
-                                do{
-                                    result = try response()
-                                } catch let error {
-                                    print((error as! ChinoError).toString())
-                                }
-                                XCTAssert(result=="success")
-                                print("Delete blob: "+result!)
-                                self.chino.documents.deleteDocument(document_id: doc.document_id, force: true) { (response) in
-                                    do{
-                                        result = try response()
-                                    } catch let error {
-                                        print((error as! ChinoError).toString())
-                                    }
-                                    XCTAssert(result=="success")
-                                    print("Delete document: "+result!)
-                                    self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (response) in
-                                        do{
-                                            result = try response()
-                                        } catch let error {
-                                            print((error as! ChinoError).toString())
-                                        }
-                                        XCTAssert(result=="success")
-                                        print("Delete schema: "+result!)
-                                        self.chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (response) in
-                                            do{
-                                                result = try response()
-                                            } catch let error {
-                                                print((error as! ChinoError).toString())
-                                            }
-                                            XCTAssert(result=="success")
-                                            print("Delete repo: "+result!)
-                                            check = false
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            check = false
+        }
+        while(check){}
+        check = true
+        
+        self.chino.schemas.createSchema(repository_id: repo.repository_id, description: description, structure: structure) { (response) in
+            do{
+                schema = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
             }
+            check = false
         }
-        while(check){
+        while(check){}
+        check = true
+        
+        let content = ["name": "Giacomino", "last_name": "Storti", "test_integer": 123] as [String : Any]
+        
+        sleep(2)
+        
+        self.chino.documents.createDocument(schema_id: schema.schema_id, content: content as NSDictionary) { (response) in
+            do{
+                doc = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            check = false
+        }
+        while(check){}
+        check = true
+        
+        self.chino.blobs.uploadBlob(path: path, document_id: doc.document_id, field: "test_blob", file_name: name) { (response) in
+            do{
+                blob = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            check = false
+        }
+        while(check){}
+        check = true
             
+
+        self.chino.blobs.get(blob_id: (blob?.blob_id)!, destination: destination) { (response) in
+            do{
+                blobResponse = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            print("MD5: "+(blobResponse?.md5)!)
+            print("SHA1: "+(blobResponse?.sha1)!)
+            check = false
         }
+        while(check){}
+        check = true
+        
+        self.chino.blobs.deleteBlob(blob_id: (blob?.blob_id)!) { (response) in
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            print("Delete blob: "+result!)
+            check = false
+        }
+        while(check){}
+        check = true
+            
+        self.chino.documents.deleteDocument(document_id: doc.document_id, force: true) { (response) in
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            print("Delete document: "+result!)
+            check = false
+        }
+        while(check){}
+        check = true
+            
+            
+        self.chino.schemas.deleteSchema(schema_id: schema.schema_id, force: true) { (response) in
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            print("Delete schema: "+result!)
+            check = false
+        }
+        while(check){}
+        check = true
+        self.chino.repositories.deleteRepository(repository_id: repo.repository_id, force: true) { (response) in
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            print("Delete repo: "+result!)
+            check = false
+        }
+        while(check){}
     }
-    
+
     func testErrors(){
         var check = true
         chino.repositories.listRepositories(offset: 0, limit: 101) { (response) in
