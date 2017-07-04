@@ -1353,7 +1353,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         check = true
             
         //Test logout
-        self.chino.auth.logout(token: loggedUser.access_token, app_id: app.app_id, app_secret: "") { (response) in
+        self.chino.auth.logout(token: loggedUser.access_token) { (response) in
             var result: String!
             do{
                 result = try response()
@@ -1543,7 +1543,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino.auth.logout(token: loggedUser.access_token, app_id: app.app_id, app_secret: app.app_name) { (response) in
+        self.chino.auth.logout(token: loggedUser.access_token) { (response) in
             var result: String!
             do{
                 result = try response()
