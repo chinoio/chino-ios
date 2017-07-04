@@ -16,13 +16,13 @@ To use [CocoaPods](http://cocoapods.org), a dependency manager for Cocoa project
 $ gem install cocoapods
 ```
 
-Then navigate to the directory that contains your project and create a new file called `Podfile`. You can do this either with `pod init`, or open an existing Podfile, and then add `pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.0'` to the main loop. Your Podfile should look something like this:
+Then navigate to the directory that contains your project and create a new file called `Podfile`. You can do this either with `pod init`, or open an existing Podfile, and then add `pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.1'` to the main loop. Your Podfile should look something like this:
 
 ```ruby
 use_frameworks!
 
 target '<YOUR_PROJECT_NAME>' do
-pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.0'
+pod 'ChinoOSXLibrary', :git => 'https://github.com/chinoio/chino-ios.git', :tag => '1.1'
 end
 ```
 
@@ -53,7 +53,7 @@ To install the CHINO.io Swift SDK via Carthage, you need to create a `Cartfile` 
 
 ```
 # CHINO.io
-github "https://github.com/chinoio/chino-ios" ~> 1.0
+github "https://github.com/chinoio/chino-ios" ~> 1.1
 ```
 
 Then, run the following command to install the dependency to checkout and build the CHINO.io Swift SDK repository:
