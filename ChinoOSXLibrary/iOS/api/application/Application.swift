@@ -15,6 +15,7 @@ open class Application {
     open var app_name: String
     open var redirect_url: String
     open var app_id: String
+    open var client_type: String
     
     init(){
         self.app_secret=""
@@ -22,14 +23,16 @@ open class Application {
         self.app_name=""
         self.redirect_url=""
         self.app_id=""
+        self.client_type=""
     }
     
-    init(app_secret: String, grant_type: String, app_name: String, redirect_url: String, app_id: String){
+    init(app_secret: String, grant_type: String, app_name: String, redirect_url: String, app_id: String, client_type: String){
         self.app_secret=app_secret
         self.grant_type=grant_type
         self.app_name=app_name
         self.redirect_url=redirect_url
         self.app_id=app_id
+        self.client_type=client_type
     }
 }
 
@@ -61,7 +64,12 @@ extension Application {
             throw SerializationError.missing("app_id")
         }
         
+        // Extract client_type
+        guard let client_type = json["client_type"] as? String else {
+            throw SerializationError.missing("client_type")
+        }
+        
         // Initialize properties
-        self.init(app_secret: app_secret, grant_type: grant_type, app_name: app_name, redirect_url: redirect_url, app_id: app_id)
+        self.init(app_secret: app_secret, grant_type: grant_type, app_name: app_name, redirect_url: redirect_url, app_id: app_id, client_type: client_type)
     }
 }

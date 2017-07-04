@@ -21,7 +21,7 @@ class ChinoOSXLibraryTests: XCTestCase {
 
         //Clear all the resources for such customer_id and customer_key, needed to test some functionalities
         //NOTE: DO NOT use production values for these tests
-        deleteAll(chino: chino)
+        //deleteAll(chino: chino)
     }
     
     override func tearDown() {
@@ -1278,7 +1278,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         var check=true
         let description = "test_description"
         
-        let username="jacob@gmail.com"
+        let username="jacob@gmail.com"+String(arc4random_uniform(300))
         let password="password"
         
         var schema: UserSchema!
@@ -1326,8 +1326,8 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        //Test login with password
-        self.chino.auth.loginWithPassword(username: username, password: password, app_id: app.app_id, app_secret: app.app_secret) { (response) in
+        //Test login with password without the app_secret
+        self.chino.auth.loginWithPassword(username: username, password: password, app_id: app.app_id, app_secret: "") { (response) in
             do{
                 loggedUser = try response()
             } catch let error {
@@ -1353,7 +1353,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         check = true
             
         //Test logout
-        self.chino.auth.logout(token: loggedUser.access_token, app_id: app.app_id, app_secret: app.app_secret) { (response) in
+        self.chino.auth.logout(token: loggedUser.access_token, app_id: app.app_id, app_secret: "") { (response) in
             var result: String!
             do{
                 result = try response()
@@ -1626,7 +1626,7 @@ class ChinoOSXLibraryTests: XCTestCase {
     
     func testBlobs(){
         
-        let path = "/Users/chino/Downloads/"
+        let path = "/Users/chino/Documents/GuitarPro/PersonalCreations/"
         let destination = "/Users/chino/Desktop/"
         let name = "Eve.gp5"
         let description = "test_description"

@@ -10,10 +10,16 @@ import Foundation
 
 open class Auth: ChinoBaseAPI {
     
+    //If you want to login from a "public application" (please check the docs if you don't understand something), simply pass 
+    //an empty string (i.e. "") as the app_secret
     public func loginWithPassword(username: String, password: String, app_id: String, app_secret: String, completion: @escaping (_ inner: () throws -> LoggedUser) -> Void){
-        let data = "grant_type=password&username=\(username)&password=\(password)".data(using:String.Encoding.ascii, allowLossyConversion: false)
-        ChinoAPI.setCustomer(customer_id: app_id, customer_key: app_secret)
-        postResource(path: "/auth/token/", json: data!, with_auth: true){
+        let data: Data!
+        if (app_secret == "") {
+            data = "grant_type=password&username=\(username)&password=\(password)&client_id=\(app_id)".data(using:String.Encoding.ascii, allowLossyConversion: false)
+        } else {
+            data = "grant_type=password&username=\(username)&password=\(password)&client_id=\(app_id)&client_secret=\(app_secret)".data(using:String.Encoding.ascii, allowLossyConversion: false)
+        }
+        postResource(path: "/auth/token/", json: data!, with_auth: false){
             (data, error) in
             if error != nil {
                 completion({throw error!})
@@ -27,8 +33,15 @@ open class Auth: ChinoBaseAPI {
         }
     }
     
+    //If you want to login from a "public application" (please check the docs if you don't understand something), simply pass
+    //an empty string (i.e. "") as the app_secret
     public func loginWithAuthorizationCode(code: String, redirect_url: String, app_id: String, app_secret: String, completion: @escaping (_ inner: () throws -> LoggedUser) -> Void){
-        let data = "grant_type=authorization_code&code=\(code)&redirect_uri=\(redirect_url)&client_id=\(app_id)&client_secret=\(app_secret)&scope=read write".data(using:String.Encoding.ascii, allowLossyConversion: false)
+        let data: Data!
+        if (app_secret == "") {
+            data = "grant_type=authorization_code&code=\(code)&redirect_uri=\(redirect_url)&client_id=\(app_id)&scope=read write".data(using:String.Encoding.ascii, allowLossyConversion: false)
+        } else {
+            data = "grant_type=authorization_code&code=\(code)&redirect_uri=\(redirect_url)&client_id=\(app_id)&client_secret=\(app_secret)&scope=read write".data(using:String.Encoding.ascii, allowLossyConversion: false)
+        }
         postResource(path: "/auth/token/", json: data!, with_auth: false){
             (data, error) in
             if error != nil {
