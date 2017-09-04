@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'ChinoOSXLibrary'
-  s.version      = '1.1'
+  s.version      = '1.2'
   s.summary      = 'Chino iOS SDK'
   s.description  = 'Official Swift wrapper for CHINO.io API'
 
