@@ -10,6 +10,21 @@ import Foundation
 
 open class Users: ChinoBaseAPI{
     
+    public func me(completion: @escaping (_ inner: () throws -> User) -> Void) {
+        getResource(path: "/users/me", offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
+            (data, error) in
+            if error != nil {
+                completion({throw error!})
+            } else if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                let body = json!["data"] as? [String:Any]
+                let userString: NSDictionary = body!["user"] as! NSDictionary
+                if let user = try? User(json: userString as! [String : Any]) {
+                    completion({user})
+                }
+            }
+        }
+    }
+    
     public func getUser(user_id id: String, completion: @escaping (_ inner: () throws -> User) -> Void) {
         getResource(path: "/users/"+id, offset: 0, limit: ChinoConstants.QUERY_DEFAULT_LIMIT) {
             (data, error) in

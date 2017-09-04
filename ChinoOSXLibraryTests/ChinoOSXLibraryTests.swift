@@ -1351,7 +1351,21 @@ class ChinoOSXLibraryTests: XCTestCase {
         }
         while(check){}
         check = true
-            
+        
+        //Test user detail
+        self.chino.users.me() { (response) in
+            do{
+                user = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidUser(user: user))
+            XCTAssert(user?.attributes["last_name"] as! String == "Storti")
+            check = false
+        }
+        while(check){}
+        check = true
+        
         //Test logout
         self.chino.auth.logout(token: loggedUser.access_token) { (response) in
             var result: String!
