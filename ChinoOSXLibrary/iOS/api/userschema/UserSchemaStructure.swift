@@ -24,7 +24,7 @@ open class UserSchemaStructure {
         for value in self.fields {
             str.append(value.toString()+",")
         }
-        str = str.substring(to: str.index(before: str.endIndex))
+        str = String(str[..<str.index(before: str.endIndex)])
         str.append("]")
         return str
     }
@@ -33,7 +33,7 @@ open class UserSchemaStructure {
 extension UserSchemaStructure {
     convenience init(json: [String: Any]) throws {
         
-        // Extract repository_id
+        // Extract fields
         var fields: [Field] = []
         
         let fs = json["fields"] as! NSArray

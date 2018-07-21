@@ -67,12 +67,12 @@ open class SearchRequest {
         for s in self.sort {
             result.append(s.toString()+",")
         }
-        result = result.substring(to: result.index(before: result.endIndex))
+        result = String(result[..<result.index(before: result.endIndex)])
         result.append("], \"filter\": [")
         for f in self.filter {
             result.append(f.toString()+",")
         }
-        result = result.substring(to: result.index(before: result.endIndex))
+        result = String(result[..<result.index(before: result.endIndex)])
         result.append("]}")
         return result
 //        var dict = NSDictionary()

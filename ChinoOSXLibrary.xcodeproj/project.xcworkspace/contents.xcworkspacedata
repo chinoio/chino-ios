@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ChinoOSXLibrary.xcodeproj">
+      location = "group:../GetConsentsResponse.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/paolo/Documents/ChinoSDKs/chino-ios/ChinoOSXLibrary/Consents.swift">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

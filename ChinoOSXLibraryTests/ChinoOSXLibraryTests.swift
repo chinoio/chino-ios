@@ -7,17 +7,29 @@
 //
 
 import XCTest
-import ChinoOSXLibrary
+@testable import ChinoOSXLibrary
 
 class ChinoOSXLibraryTests: XCTestCase {
 
     var chino: ChinoAPI!
+    var URL: String!
+    var CUSTOMER_ID: String!
+    var CUSTOMER_KEY: String!
     
     override func setUp() {
         super.setUp()
-        continueAfterFailure = false
+        continueAfterFailure = false        
+
+        let testBundle = Bundle(for: ChinoOSXLibraryTests.self)
+        if let url = testBundle.url(forResource: "Info", withExtension: "plist"),
+            var myDict = NSDictionary(contentsOf: url) as? [String:Any] {
+            URL = myDict["URL"] as? String
+            CUSTOMER_ID = myDict["CUSTOMER_ID"] as? String
+            CUSTOMER_KEY = myDict["CUSTOMER_KEY"] as? String
+        }
+        
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        chino = ChinoAPI(hostUrl: URL, customerId: CUSTOMER_ID, customerKey: CUSTOMER_KEY)
 
         //Clear all the resources for such customer_id and customer_key, needed to test some functionalities
         //NOTE: DO NOT use production values for these tests
@@ -27,6 +39,123 @@ class ChinoOSXLibraryTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+    }
+    
+    func testConsents() {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        var check=true
+        var consent_id = ""
+        var consent_id_2 = ""
+        let user_id = "admin@chino.io"
+        let user_id_updated = "admin_updated@chino.io"
+        
+        let data_controller = DataController.init(on_behalf: true, company: "Acme", contact: "John Doe", address: "221B Baker St.", email: "info@acme.com", VAT: "IT03256920228")
+        
+        let purpose = Purpose.init(authorized: true, purpose: "health data", description: "Processing of age and sex")
+        
+        //Test create consent
+        self.chino.consents.createConsent(user_id: user_id, description: "a long textual description", policy_url: "https://chino.io/legal/privacy-policy", policy_version: "v1.0", collection_mode: "webform", data_controller: data_controller, purposes: [purpose]) { (response) in
+            var consent: Consent!
+            do{
+                consent = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidConsent(consent: consent!))
+            XCTAssert(consent?.user_id==user_id)
+            consent_id = (consent?.consent_id)!
+            check=false
+        }
+        while(check){}
+        check=true
+        
+        //Test get consent
+        self.chino.consents.getConsent(consent_id: consent_id) { (response) in
+            var consent: Consent!
+            do{
+                consent = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidConsent(consent: consent!))
+            XCTAssert(consent?.user_id==user_id)
+            check=false
+        }
+        while(check){}
+        check=true
+        
+        self.chino.consents.createConsent(user_id: user_id, description: "a long textual description", policy_url: "https://chino.io/legal/privacy-policy", policy_version: "v1.0", collection_mode: "webform", data_controller: data_controller, purposes: [purpose]) { (response) in
+            var consent: Consent!
+            do{
+                consent = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidConsent(consent: consent!))
+            XCTAssert(consent?.user_id==user_id)
+            consent_id_2 = (consent?.consent_id)!
+            check=false
+        }
+        while(check){}
+        check=true
+        
+        //Test update consent
+        self.chino.consents.updateConsent(consent_id: consent_id, user_id: user_id_updated, description: "a long textual description", policy_url: "https://chino.io/legal/privacy-policy", policy_version: "v1.0", collection_mode: "webform", data_controller: data_controller, purposes: [purpose]) { (response) in
+            var consent: Consent!
+            do{
+                consent = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(assertValidConsent(consent: consent!))
+            XCTAssert(consent?.user_id==user_id_updated)
+            check=false
+        }
+        while(check){}
+        check=true
+        
+        //Test list consents
+        self.chino.consents.listConsents(offset: 0, limit: 100) { (response) in
+            var consents: GetConsentsResponse!
+            do{
+                consents = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            
+            for value in (consents?.consents)! {
+                XCTAssert(assertValidConsent(consent: value))
+            }
+        }
+        
+        //Test delete consent 1
+        self.chino.consents.deleteConsent(consent_id: consent_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            check = false
+        }
+        while(check){}
+        check = true
+        
+        //Test delete consent 2
+        self.chino.consents.deleteConsent(consent_id: consent_id_2, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            check = false
+        }
+        while(check){}
+        check = true
     }
     
     func testRepositories() {
@@ -103,8 +232,6 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check=true
         
-        var repo_count=1
-        
         //Test list repositories
         self.chino.repositories.listRepositories(offset: 0, limit: 100) { (response) in
             var repos: GetRepositoriesResponse!
@@ -113,28 +240,25 @@ class ChinoOSXLibraryTests: XCTestCase {
             } catch let error {
                 print((error as! ChinoError).toString())
             }
-            repo_count = (repos?.count)!
             
             for value in (repos?.repositories)! {
                 XCTAssert(assertValidRepository(repository: value))
-                XCTAssert(value.description==description_updated || value.description==description)
-                
-                //Test delete repository
-                self.chino.repositories.deleteRepository(repository_id: value.repository_id, force: true) { (response) in
-                    var result: String!
-                    do{
-                        result = try response()
-                    } catch let error {
-                        print((error as! ChinoError).toString())
-                    }
-                    XCTAssert(result=="success")
-                    repo_count = repo_count-1
-                }
             }
         }
-        while(repo_count>0){
-            
+                
+        //Test delete repository
+        self.chino.repositories.deleteRepository(repository_id: repo_id, force: true) { (response) in
+            var result: String!
+            do{
+                result = try response()
+            } catch let error {
+                print((error as! ChinoError).toString())
+            }
+            XCTAssert(result=="success")
+            check = false
         }
+        while(check){}
+        check = true
     }
     
     func testSchemas() {
@@ -1197,7 +1321,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         var app_id = ""
         
         //Test create application
-        chino.applications.createApplication(name: "test_application", grantType: GrantTypeValues.password, redirectUrl: "") { (response) in
+        chino.applications.createApplication(name: "test_application", grantType: GrantTypeValues.password, clientType: ClientTypeValues.client_public, redirectUrl: "") { (response) in
             var app: Application!
             do{
                 app = try response()
@@ -1228,7 +1352,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         check=true
         
         //Test update application
-        self.chino.applications.updateApplication(application_id: app_id, name: "test_application_update", grantType: GrantTypeValues.password, redirectUrl: "") { (response) in
+        self.chino.applications.updateApplication(application_id: app_id, name: "test_application_update", grantType: GrantTypeValues.password, clientType: ClientTypeValues.client_public, redirectUrl: "") { (response) in
             var app: Application!
             do{
                 app = try response()
@@ -1315,7 +1439,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino.applications.createApplication(name: "test_app", grantType: GrantTypeValues.password, redirectUrl: "") { (response) in
+        self.chino.applications.createApplication(name: "test_app", grantType: GrantTypeValues.password, clientType: ClientTypeValues.client_public, redirectUrl: "") { (response) in
             do{
                 app = try response()
             } catch let error {
@@ -1367,7 +1491,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         check = true
         
         //Test logout
-        self.chino.auth.logout(token: loggedUser.access_token) { (response) in
+        self.chino.auth.logout(token: loggedUser.access_token, app_id: app.app_id, app_secret: app.app_secret) { (response) in
             var result: String!
             do{
                 result = try response()
@@ -1381,7 +1505,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino=ChinoAPI.init(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        self.chino=ChinoAPI.init(hostUrl: URL, customerId: CUSTOMER_ID, customerKey: CUSTOMER_KEY)
             
         self.chino.users.deleteUser(user_id: user.user_id, force: true) { (response) in
             var result: String!
@@ -1470,7 +1594,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino.applications.createApplication(name: "test_app", grantType: GrantTypeValues.password, redirectUrl: "") { (response) in
+        self.chino.applications.createApplication(name: "test_app", grantType: GrantTypeValues.password, clientType: ClientTypeValues.client_public, redirectUrl: "") { (response) in
             do{
                 app = try response()
             } catch let error {
@@ -1557,7 +1681,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        self.chino.auth.logout(token: loggedUser.access_token) { (response) in
+        self.chino.auth.logout(token: loggedUser.access_token, app_id: app.app_id, app_secret: app.app_secret) { (response) in
             var result: String!
             do{
                 result = try response()
@@ -1570,7 +1694,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        chino = ChinoAPI(hostUrl: URL, customerId: CUSTOMER_ID, customerKey: CUSTOMER_KEY)
 
         chino.documents.deleteDocument(document_id: document.document_id, force: true) { (response) in
             var result: String!
@@ -1640,9 +1764,9 @@ class ChinoOSXLibraryTests: XCTestCase {
     
     func testBlobs(){
         
-        let path = "/Users/chino/Documents/GuitarPro/PersonalCreations/"
-        let destination = "/Users/chino/Desktop/"
-        let name = "Eve.gp5"
+        let path = ""
+        let destination = ""
+        let name = ""
         let description = "test_description"
         var check=true
         
@@ -1831,7 +1955,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        chino = ChinoAPI(hostUrl: "", customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        chino = ChinoAPI(hostUrl: "", customerId: CUSTOMER_ID, customerKey: CUSTOMER_KEY)
         chino.repositories.createRepository(description: "test") { (response) in
             do{
                 _ = try response()
@@ -1844,7 +1968,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: "")
+        chino = ChinoAPI(hostUrl: URL, customerId: CUSTOMER_ID, customerKey: "")
         chino.repositories.createRepository(description: "test") { (response) in
             do{
                 _ = try response()
@@ -1856,7 +1980,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        chino = ChinoAPI(hostUrl: Credentials.url, customerId: "", customerKey: Credentials.customer_key)
+        chino = ChinoAPI(hostUrl: URL, customerId: "", customerKey: CUSTOMER_KEY)
         chino.repositories.createRepository(description: "test") { (response) in
             do{
                 _ = try response()
@@ -1868,7 +1992,7 @@ class ChinoOSXLibraryTests: XCTestCase {
         while(check){}
         check = true
         
-        chino = ChinoAPI(hostUrl: Credentials.url, customerId: Credentials.customer_id, customerKey: Credentials.customer_key)
+        chino = ChinoAPI(hostUrl: URL, customerId: CUSTOMER_ID, customerKey: CUSTOMER_KEY)
         
         var fields = [Field]()
         fields.append(Field(type: "", name: "", indexed: true))

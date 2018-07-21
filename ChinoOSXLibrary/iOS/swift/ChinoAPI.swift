@@ -23,6 +23,7 @@ open class ChinoAPI{
     open var auth: Auth
     open var blobs: Blobs
     open var permissions: Permissions
+    open var consents: Consents
     
     public init(hostUrl url: String){
         self.url = url
@@ -39,6 +40,7 @@ open class ChinoAPI{
         auth = Auth(hostUrl: url)
         blobs = Blobs(hostUrl: url)
         permissions = Permissions(hostUrl: url)
+        consents = Consents(hostUrl: url)
     }
     
     public init(hostUrl url: String, customerId id: String, customerKey key: String){
@@ -58,6 +60,7 @@ open class ChinoAPI{
         auth = Auth(hostUrl: url)
         blobs = Blobs(hostUrl: url)
         permissions = Permissions(hostUrl: url)
+        consents = Consents(hostUrl: url)
     }
     
     static func setCustomer(customer_id id: String, customer_key key: String) {

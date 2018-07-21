@@ -24,7 +24,7 @@ open class SchemaStructure {
         for value in self.fields {
             str.append(value.toString()+",")
         }
-        str = str.substring(to: str.index(before: str.endIndex))
+        str = String(str[..<str.index(before: str.endIndex)])
         str.append("]")
         return str
     }

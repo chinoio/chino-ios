@@ -143,7 +143,7 @@ open class Blobs: ChinoBaseAPI{
                     }
                     var filename = httpResponse.allHeaderFields["Content-Disposition"] as! String
                     let index = filename.index(filename.startIndex, offsetBy: 21)
-                    filename = filename.substring(from: index)
+                    filename = String(filename[index...])
                     let url = URL(fileURLWithPath:path+"/\(filename)")
                     print(url)
                     do {

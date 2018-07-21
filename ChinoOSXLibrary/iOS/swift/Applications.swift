@@ -53,8 +53,8 @@ open class Applications: ChinoBaseAPI{
         }
     }
     
-    public func createApplication(name: String, grantType: GrantTypeValues, redirectUrl: String, completion: @escaping (_ inner: () throws -> Application) -> Void) {
-        let createAppRequest = CreateApplicationRequest(name: name, grant_type: grantType, redirect_url: redirectUrl)
+    public func createApplication(name: String, grantType: GrantTypeValues, clientType: ClientTypeValues, redirectUrl: String, completion: @escaping (_ inner: () throws -> Application) -> Void) {
+        let createAppRequest = CreateApplicationRequest(name: name, grant_type: grantType, client_type: clientType, redirect_url: redirectUrl)
         postResource(path: "/auth/applications", json: createAppRequest.toString()) {
             (data, error) in
             if error != nil {
@@ -69,8 +69,8 @@ open class Applications: ChinoBaseAPI{
         }
     }
     
-    public func updateApplication(application_id id: String, name: String, grantType: GrantTypeValues, redirectUrl: String, completion: @escaping (_ inner: () throws -> Application) -> Void) {
-        let createAppRequest = CreateApplicationRequest(name: name, grant_type: grantType, redirect_url: redirectUrl)
+    public func updateApplication(application_id id: String, name: String, grantType: GrantTypeValues, clientType: ClientTypeValues, redirectUrl: String, completion: @escaping (_ inner: () throws -> Application) -> Void) {
+        let createAppRequest = CreateApplicationRequest(name: name, grant_type: grantType, client_type: clientType, redirect_url: redirectUrl)
         putResource(path: "/auth/applications/\(id)", json: createAppRequest.toString()) {
             (data, error) in
             if error != nil {

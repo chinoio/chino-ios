@@ -22,6 +22,16 @@ public func assertValidRepository(repository: Repository) -> Bool{
     return true
 }
 
+public func assertValidConsent(consent: Consent) -> Bool{
+    if (consent.inserted_date) == nil {
+        return false
+    }
+    if (consent.consent_id == "") {
+        return false
+    }
+    return true
+}
+
 public func assertValidUserSchema(user_schema: UserSchema) -> Bool{
     if (user_schema.insertDate) == nil {
         return false

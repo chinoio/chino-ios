@@ -72,8 +72,8 @@ open class Auth: ChinoBaseAPI {
         }
     }
     
-    public func logout(token: String, completion: @escaping (_ inner: () throws -> String) -> Void){
-        let data = "token=\(token)".data(using:String.Encoding.ascii, allowLossyConversion: false)
+    public func logout(token: String, app_id: String, app_secret: String, completion: @escaping (_ inner: () throws -> String) -> Void){
+        let data = "token=\(token)&client_id=\(app_id)&client_secret=\(app_secret)".data(using:String.Encoding.ascii, allowLossyConversion: false)
         postResource(path: "/auth/revoke_token/", json: data!, with_auth: false){
             (data, error) in
             if error != nil {

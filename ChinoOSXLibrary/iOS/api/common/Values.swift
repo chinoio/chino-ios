@@ -20,6 +20,18 @@ public enum GrantTypeValues {
     }
 }
 
+public enum ClientTypeValues {
+    case client_public, client_confidential
+    func returnValue(value: ClientTypeValues) -> String {
+        switch value {
+        case .client_public:
+            return "public"
+        case .client_confidential:
+            return "authorization-code"
+        }
+    }
+}
+
 public enum ActionValues {
     case grant, revoke
     
