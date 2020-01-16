@@ -4,6 +4,15 @@ The iOS deployment target is set to 10.3
 If you want to change it, check the settings of the project
 under *General* tab.
 
+- - -
+## **NOTICE**
+Starting from **February 1st 2020**, this code will no longer be on GitHub but will be moved to GitLab.
+
+For any question, please reach out to [tech-support@chino.io](mailto:tech-support@chino.io).
+
+- - -
+
+
 ### SDK distribution
 
 You can integrate the CHINO.io Swift SDK into your project using one of several methods.
