@@ -1,27 +1,25 @@
 #  CHINO.io Swift client #
-*Official* Swift wrapper for **CHINO.io** API,
-The iOS deployment target is set to 10.3
-If you want to change it, check the settings of the project
-under *General* tab.
 
-- - -
-
-## **NOTICE**
 **This repository is deprecated.**
 This branch is only kept for compatibility with older versions.
 
-The code will be maintained on https://gitlab.com/chinoio-public/sdk-chino-<>.
+The code will be maintained on https://gitlab.com/chinoio-public/sdk-chino-swift.
 
 - - -
 
-## To install the current version
+## To install the latest version
 
 Follow the instructions in the
 [current repository](https://gitlab.com/chinoio-public/sdk-chino-swift/blob/master/INSTRUCTIONS.md#install)
 
 ## To install an older version
 
-Use one of the two methods below.
+The iOS deployment target is set to 10.3
+If you want to change it, check the settings of the project
+under *General* tab.
+
+Use one of the two methods below to get an older version 
+of the library (up to 1.3).
 
 ### CocoaPods
 
