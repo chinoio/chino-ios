@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../GetConsentsResponse.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/paolo/Documents/ChinoSDKs/chino-ios/ChinoOSXLibrary/Consents.swift">
+   </FileRef>
+   <FileRef
+      location = "self:">
+   </FileRef>
+</Workspace>
