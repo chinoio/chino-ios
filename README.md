@@ -1,12 +1,9 @@
-#  CHINO.io Swift client #
-*Official* Swift wrapper for **CHINO.io** API  
-Please switch to branch develop for the SDKs
+# Chino Swift SDK (iOS)
 
-- - -
-## **NOTICE**
-Starting from **February 1st 2020**, this code will no longer be on GitHub but will be moved to GitLab.
-
-For any question, please reach out to [tech-support@chino.io](mailto:tech-support@chino.io).
+**This repository is deprecated.**
+The code has been moved to https://gitlab.com/chinoio-public/sdk-chino-swift.
 
 - - -
 
+- Learn more about [Chino.io](https://www.chino.io)
+- Our new [GitLab repository](https://gitlab.com/chinoio-public)
